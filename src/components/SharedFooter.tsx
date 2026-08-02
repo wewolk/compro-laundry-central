@@ -8,9 +8,6 @@ export default function SharedFooter() {
   const pathname = usePathname();
   const { content } = useSiteContent();
 
-  // Don't show footer on admin pages
-  if (pathname.startsWith("/admin")) return null;
-
   const footer = content?.footer ?? {
     brandName: "Central Laundry Express",
     description: "Memuat...",

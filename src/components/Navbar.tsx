@@ -34,12 +34,6 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-          <Link
-            href="/admin/login"
-            className="nav-admin-btn"
-          >
-            🔑 Login Admin
-          </Link>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -118,26 +112,6 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <div style={{ marginTop: "auto", paddingTop: "24px", borderTop: "1px solid #e2e8f0" }}>
-              <Link
-                href="/admin/login"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "12px 24px",
-                  background: "#085F80",
-                  color: "white",
-                  borderRadius: "30px",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                }}
-              >
-                🔑 Login Admin
-              </Link>
-            </div>
           </nav>
         </div>
       )}

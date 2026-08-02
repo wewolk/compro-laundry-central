@@ -122,26 +122,6 @@ img {
   border-radius: 2px;
 }
 
-.nav-admin-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 20px;
-  background-color: var(--primary);
-  color: var(--bg-white);
-  border-radius: 30px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  margin-left: 8px;
-}
-
-.nav-admin-btn:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
 .mobile-menu-btn {
   display: none;
   flex-direction: column;

@@ -1,0 +1,177 @@
+{
+  "settings": {
+    "waLink": "https://wa.me/6285181840082?text=Halo%20Central%20Laundry%20Express,%20saya%20ingin%20memesan%20layanan%20laundry.",
+    "waNumber": "0851-8184-0082",
+    "instagramUrl": "#",
+    "email": "hello@centrallaundry.id",
+    "address": "Jl. Sudirman No. 45, Jakarta Pusat",
+    "mapLink": "https://maps.google.com/?q=-7.4244,109.2302",
+    "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.2736181156826!2d109.2302196!3d-7.4243912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjUnMjcuOCJTIDEwOcKwMTMnNDguOCJF!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid",
+    "operationalHours": {
+      "weekdays": "Senin – Sabtu: 07:00 – 20:00",
+      "weekend": "Minggu: 09:00 – 17:00"
+    }
+  },
+  "paket": [
+    {
+      "id": "reguler",
+      "name": "Paket Reguler",
+      "features": [
+        "Estimasi 2-3 Hari",
+        "Parfum Pilihan",
+        "Packing Rapi"
+      ],
+      "isPopular": false
+    },
+    {
+      "id": "express",
+      "name": "Paket Express",
+      "features": [
+        "Selesai dlm 24 Jam",
+        "Parfum Ekstra",
+        "Prioritas Antrean"
+      ],
+      "isPopular": true
+    },
+    {
+      "id": "kilat",
+      "name": "Paket Kilat (6 Jam)",
+      "features": [
+        "Selesai dlm 6 Jam",
+        "Ekspres Pick-up",
+        "Layanan VIP"
+      ],
+      "isPopular": false
+    }
+  ],
+  "kiloan": [
+    {
+      "id": "reguler",
+      "name": "Layanan Reguler",
+      "description": "Cuci bersih, wangi, dan setrika rapi. Selesai dalam waktu santai.",
+      "features": [
+        "Estimasi: 3 Hari",
+        "Pewangi Premium"
+      ],
+      "iconType": "clock",
+      "isPopular": false
+    },
+    {
+      "id": "ekspres",
+      "name": "Layanan Ekspres",
+      "description": "Butuh besok? Kami pastikan pakaian Anda siap dipakai tepat waktu.",
+      "features": [
+        "Estimasi: 24 Jam",
+        "Lipat Rapi & Higienis"
+      ],
+      "iconType": "lightning",
+      "isPopular": true
+    },
+    {
+      "id": "kilat",
+      "name": "Layanan Kilat",
+      "description": "Solusi darurat untuk meeting mendadak atau acara penting hari ini.",
+      "features": [
+        "Estimasi: 6–12 Jam",
+        "Prioritas Penanganan"
+      ],
+      "iconType": "clock2",
+      "isPopular": false
+    },
+    {
+      "id": "raja-eropa-1785673400041",
+      "name": "raja eropa",
+      "description": "gratis cuci 3x seminggu dengan max. berat 4 kg",
+      "features": [
+        "estimasi 2 jam selesai",
+        "wangi dan bersih",
+        "diutamakan selesai duluan"
+      ],
+      "iconType": "lightning",
+      "isPopular": true
+    }
+  ],
+  "footer": {
+    "brandName": "Central Laundry Express",
+    "description": "Kebersihan dan kenyamanan untuk gaya hidup modern Anda. Solusi laundry terpercaya keluarga Indonesia.",
+    "menuItems": [
+      {
+        "label": "Beranda",
+        "href": "/"
+      },
+      {
+        "label": "Layanan",
+        "href": "/layanan"
+      },
+      {
+        "label": "Tentang Kami",
+        "href": "/tentang"
+      },
+      {
+        "label": "Galeri",
+        "href": "/galeri"
+      },
+      {
+        "label": "Kontak",
+        "href": "/kontak"
+      }
+    ],
+    "copyright": "© 2024 Central Laundry Express. Hygiene & Convenience."
+  },
+  "gallery": [
+    {
+      "id": 1,
+      "src": "/hero_laundry.png",
+      "alt": "Mesin Cuci Higienis",
+      "category": "proses-pencucian",
+      "type": "image"
+    },
+    {
+      "id": 2,
+      "src": "/hero_laundry.png",
+      "alt": "Penyetrikaan Uap Presisi",
+      "category": "penyetrikaan",
+      "type": "image"
+    },
+    {
+      "id": 3,
+      "src": "/hero_laundry.png",
+      "alt": "Tim Profesional Central Laundry",
+      "category": "tim-kami",
+      "type": "image"
+    },
+    {
+      "id": 4,
+      "src": "/hero_laundry.png",
+      "alt": "Layanan Antar Jemput",
+      "category": "antar-jemput",
+      "type": "video"
+    },
+    {
+      "id": 5,
+      "src": "/hero_laundry.png",
+      "alt": "Penyimpanan Bersih & Rapi",
+      "category": "fasilitas",
+      "type": "image"
+    },
+    {
+      "id": 6,
+      "src": "/hero_laundry.png",
+      "alt": "Fasilitas Workshop",
+      "category": "fasilitas",
+      "type": "video"
+    },
+    {
+      "id": 7,
+      "src": "/uploads/img_1785673574680.png",
+      "alt": "Foto Baru",
+      "category": "proses-pencucian",
+      "type": "image"
+    }
+  ],
+  "admin": {
+    "password": "admin123",
+    "resetCode": "826540",
+    "resetExpiry": 1785675707293
+  }
+}

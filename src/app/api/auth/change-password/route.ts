@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getContent, saveContent } from "@/lib/data";
 import { verifyToken, COOKIE_NAME } from "@/lib/auth";
+import { hashPassword, verifyPassword } from "@/lib/password";
 
 export async function POST(request: NextRequest) {
   try {
     const token = request.cookies.get(COOKIE_NAME)?.value;
-    if (!token || !verifyToken(token)) {
+    if (!token || !(await verifyToken(token))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -22,11 +23,11 @@ export async function POST(request: NextRequest) {
     }
 
     const content = await getContent();
-    if (currentPassword !== content.admin.password) {
+    if (!(await verifyPassword(currentPassword, content.admin.password))) {
       return NextResponse.json({ error: "Password saat ini salah" }, { status: 400 });
     }
 
-    content.admin.password = newPassword;
+    content.admin.password = await hashPassword(newPassword);
     await saveContent(content);
 
     return NextResponse.json({ success: true, message: "Password berhasil diubah!" });

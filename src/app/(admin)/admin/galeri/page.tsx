@@ -71,6 +71,9 @@ export default function GaleriAdminPage() {
         {gallery.map((item) => (
           <Card key={item.id}>
             <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "16px", background: "#f1f5f9" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element --
+                  Admin preview of user uploads: arbitrary runtime paths that
+                  next/image would need explicit remotePatterns for. */}
               <img
                 src={item.src}
                 alt={item.alt}

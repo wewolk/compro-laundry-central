@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 export interface SiteContent {
   settings: {
@@ -29,18 +29,6 @@ export function useContent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
-
-  const fetchContent = useCallback(async () => {
-    try {
-      const res = await fetch("/api/content");
-      const data = await res.json();
-      setContent(data);
-    } catch {
-      setMessage({ text: "Gagal memuat data", type: "error" });
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   useEffect(() => {
     let cancelled = false;

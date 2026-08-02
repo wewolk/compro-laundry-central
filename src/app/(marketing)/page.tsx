@@ -3,19 +3,28 @@
 import { useState } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import HeroSlider from "@/components/HeroSlider";
 import { useSiteContent } from "@/hooks/useContent";
+
+const FALLBACK_HERO = "/hero_laundry.png";
+const MAX_HERO_SLIDES = 5;
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"foto" | "video">("foto");
   const { content } = useSiteContent();
   const paket = content?.paket ?? [];
+  const settings = content?.settings;
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  // Hero slides come from the gallery images, deduplicated so repeated
+  // placeholder entries don't produce identical slides, capped at 5.
+  const heroImages = Array.from(
+    new Set(
+      (content?.gallery ?? [])
+        .filter((item) => item.type === "image" && item.src)
+        .map((item) => item.src)
+    )
+  ).slice(0, MAX_HERO_SLIDES);
+  const slides = heroImages.length > 0 ? heroImages : [FALLBACK_HERO];
 
   return (
     <>
@@ -64,14 +73,7 @@ export default function Home() {
           </div>
           <div className="hero-image-container">
             <div className="hero-image-wrapper">
-              <Image
-                src="/hero_laundry.png"
-                alt="Staf Central Laundry Express"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                style={{ objectFit: "cover" }}
-                priority
-              />
+              <HeroSlider images={slides} alt="Staf Central Laundry Express" />
             </div>
           </div>
         </div>
@@ -494,14 +496,26 @@ export default function Home() {
             </div>
 
             <div>
-              <div className="map-placeholder">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-                  <line x1="9" y1="3" x2="9" y2="18" />
-                  <line x1="15" y1="6" x2="15" y2="21" />
-                </svg>
-                <span className="map-placeholder-text">Peta Lokasi Interaktif</span>
-              </div>
+              {settings?.mapEmbedUrl ? (
+                <iframe
+                  src={settings.mapEmbedUrl}
+                  title="Peta Lokasi Central Laundry Express"
+                  className="map-placeholder"
+                  style={{ border: 0, width: "100%" }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              ) : (
+                <div className="map-placeholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+                    <line x1="9" y1="3" x2="9" y2="18" />
+                    <line x1="15" y1="6" x2="15" y2="21" />
+                  </svg>
+                  <span className="map-placeholder-text">Peta Lokasi Interaktif</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

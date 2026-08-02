@@ -22,7 +22,6 @@ export interface SiteContent {
     copyright: string;
   };
   gallery: { id: number; src: string; alt: string; category: string; type: string }[];
-  admin: { password: string; resetCode: string | null; resetExpiry: number | null };
 }
 
 let cachedContent: SiteContent | null = null;

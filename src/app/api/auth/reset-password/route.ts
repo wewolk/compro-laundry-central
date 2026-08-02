@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getContent, saveContent } from "@/lib/data";
+import { verifyResetToken } from "@/lib/auth";
+import { hashPassword } from "@/lib/password";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,18 +18,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Password hanya boleh huruf (besar/kecil) dan angka" }, { status: 400 });
     }
 
-    // Verify reset token
-    try {
-      const payload = JSON.parse(Buffer.from(resetToken, "base64").toString("utf-8"));
-      if (!payload.verified || payload.exp < Date.now()) {
-        return NextResponse.json({ error: "Token tidak valid" }, { status: 400 });
-      }
-    } catch {
+    // Verify the HMAC-signed reset token issued by /api/auth/verify-code
+    if (typeof resetToken !== "string" || !(await verifyResetToken(resetToken))) {
       return NextResponse.json({ error: "Token tidak valid" }, { status: 400 });
     }
 
     const content = await getContent();
-    content.admin.password = newPassword;
+
+    // Reject if no reset flow is active (token already consumed)
+    if (!content.admin.resetCode) {
+      return NextResponse.json({ error: "Token tidak valid" }, { status: 400 });
+    }
+
+    content.admin.password = await hashPassword(newPassword);
     content.admin.resetCode = null;
     content.admin.resetExpiry = null;
     await saveContent(content);

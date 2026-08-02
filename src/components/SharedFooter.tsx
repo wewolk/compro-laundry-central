@@ -6,19 +6,25 @@ import { useSiteContent } from "@/hooks/useContent";
 
 export default function SharedFooter() {
   const pathname = usePathname();
-  const { content } = useSiteContent();
+  const { content, loading } = useSiteContent();
 
   const footer = content?.footer ?? {
     brandName: "Central Laundry Express",
-    description: "Memuat...",
-    menuItems: [],
+    description: "",
+    menuItems: [
+      { label: "Beranda", href: "/" },
+      { label: "Layanan", href: "/layanan" },
+      { label: "Tentang Kami", href: "/tentang" },
+      { label: "Galeri", href: "/galeri" },
+      { label: "Kontak", href: "/kontak" },
+    ],
     copyright: "\u00a9 2024 Central Laundry Express",
   };
 
   const settings = content?.settings ?? {
     waLink: "#",
     instagramUrl: "#",
-    operationalHours: { weekdays: "Memuat...", weekend: "Memuat..." },
+    operationalHours: { weekdays: "", weekend: "" },
   };
 
   const scrollToTop = () => {
@@ -83,12 +89,27 @@ export default function SharedFooter() {
           <div className="footer-links-col">
             <span className="footer-links-title">Jam Operasional</span>
             <ul className="footer-links">
-              <li style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
-                {settings.operationalHours.weekdays}
-              </li>
-              <li style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
-                {settings.operationalHours.weekend}
-              </li>
+              {loading ? (
+                <li
+                  aria-hidden="true"
+                  style={{
+                    height: "14px",
+                    width: "70%",
+                    borderRadius: "4px",
+                    background: "rgba(255,255,255,0.12)",
+                    margin: "5px 0",
+                  }}
+                />
+              ) : (
+                <>
+                  <li style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
+                    {settings.operationalHours.weekdays}
+                  </li>
+                  <li style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
+                    {settings.operationalHours.weekend}
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

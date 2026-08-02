@@ -14,13 +14,13 @@ const PUBLIC_API_PATHS = [
   "/api/content", // GET only
 ];
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect admin page routes
   if (pathname.startsWith("/admin") && !PUBLIC_ADMIN_PATHS.includes(pathname)) {
     const token = request.cookies.get(COOKIE_NAME)?.value;
-    if (!token || !verifyToken(token)) {
+    if (!token || !(await verifyToken(token))) {
       const response = NextResponse.redirect(new URL("/admin/login", request.url));
       response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate");
       return response;
@@ -40,7 +40,7 @@ export function middleware(request: NextRequest) {
   const isPublicApi = PUBLIC_API_PATHS.some((p) => pathname.startsWith(p));
   if (pathname.startsWith("/api/") && !isPublicApi) {
     const token = request.cookies.get(COOKIE_NAME)?.value;
-    if (!token || !verifyToken(token)) {
+    if (!token || !(await verifyToken(token))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
   }

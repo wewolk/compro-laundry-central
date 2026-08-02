@@ -4,7 +4,9 @@ import { getContent, saveContent } from "@/lib/data";
 export async function POST() {
   try {
     const content = await getContent();
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    // Cryptographically secure 6-digit code (Math.random is predictable)
+    const bytes = crypto.getRandomValues(new Uint32Array(1));
+    const code = (100000 + (bytes[0] % 900000)).toString();
     const expiry = Date.now() + 5 * 60 * 1000;
 
     content.admin.resetCode = code;

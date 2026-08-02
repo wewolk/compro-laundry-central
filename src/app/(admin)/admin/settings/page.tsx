@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useContent, PageHeader, Card, InputField } from "../_components";
 
 export default function SettingsPage() {
-  const { content, loading, saving, message, saveContent } = useContent();
+  const { content, loading, saveContent } = useContent();
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [pwMessage, setPwMessage] = useState({ text: "", type: "" });

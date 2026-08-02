@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getContent } from "@/lib/data";
+import { createResetToken } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,10 +17,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Kode salah" }, { status: 400 });
     }
 
-    const resetToken = Buffer.from(JSON.stringify({
-      verified: true,
-      exp: Date.now() + 10 * 60 * 1000,
-    })).toString("base64");
+    // Signed token: cannot be forged client-side
+    const resetToken = await createResetToken();
 
     return NextResponse.json({ success: true, resetToken });
   } catch {

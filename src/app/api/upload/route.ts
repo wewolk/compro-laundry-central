@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { verifyToken, COOKIE_NAME } from "@/lib/auth";
+import { getImageKit, isImageKitConfigured } from "@/lib/imagekit";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,6 +8,16 @@ export async function POST(request: NextRequest) {
     const token = request.cookies.get(COOKIE_NAME)?.value;
     if (!token || !(await verifyToken(token))) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (!isImageKitConfigured()) {
+      return NextResponse.json(
+        {
+          error:
+            "ImageKit belum dikonfigurasi. Set IMAGEKIT_PUBLIC_KEY dan IMAGEKIT_PRIVATE_KEY.",
+        },
+        { status: 500 }
+      );
     }
 
     const formData = await request.formData();
@@ -29,26 +38,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Ukuran file maksimal 5MB" }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Create unique filename
-    const ext = file.name.split(".").pop();
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const ext = file.name.split(".").pop() || "jpg";
     const filename = `img_${Date.now()}.${ext}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
 
-    // Ensure directory exists
-    await mkdir(uploadDir, { recursive: true });
-
-    const filepath = path.join(uploadDir, filename);
-    await writeFile(filepath, buffer);
+    const uploaded = await getImageKit().upload({
+      file: buffer,
+      fileName: filename,
+      folder: "/central-laundry",
+      useUniqueFileName: true,
+    });
 
     return NextResponse.json({
       success: true,
-      url: `/uploads/${filename}`,
-      filename,
+      url: uploaded.url,
+      filename: uploaded.name,
+      fileId: uploaded.fileId,
     });
-  } catch {
-    return NextResponse.json({ error: "Gagal upload file" }, { status: 500 });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "Gagal upload file";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

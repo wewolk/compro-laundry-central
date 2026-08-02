@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
+import { ensureSchema, query } from "./db";
 
 const DATA_PATH = path.join(process.cwd(), "data", "content.json");
-const KV_KEY = "central-laundry-content";
+const CONTENT_KEY = "central-laundry-content";
 
 export interface SiteContent {
   settings: {
@@ -51,6 +52,8 @@ export interface GalleryItem {
   alt: string;
   category: string;
   type: string;
+  /** ImageKit fileId, present for images uploaded through the admin panel. */
+  fileId?: string;
 }
 
 export interface AdminData {
@@ -59,52 +62,39 @@ export interface AdminData {
   resetExpiry: number | null;
 }
 
-// Check if Vercel KV is available
-function hasKV(): boolean {
-  return !!process.env.KV_REST_API_URL;
-}
-
-// Read from local JSON file (works in dev and for initial seed)
-function readLocalFile(): SiteContent {
+/** Seed data shipped with the repo, used only on an empty database. */
+function readSeedFile(): SiteContent {
   const raw = fs.readFileSync(DATA_PATH, "utf-8");
   return JSON.parse(raw);
 }
 
-// Write to local JSON file (dev only)
-function writeLocalFile(content: SiteContent): void {
-  fs.writeFileSync(DATA_PATH, JSON.stringify(content, null, 2), "utf-8");
-}
-
-// Get content: KV in production, local file in development
+/**
+ * Reads the site content from Postgres. On first run the table is empty, so we
+ * seed it from data/content.json and return that.
+ */
 export async function getContent(): Promise<SiteContent> {
-  if (hasKV()) {
-    try {
-      const { kv } = await import("@vercel/kv");
-      const data = await kv.get<SiteContent>(KV_KEY);
-      if (data) return data;
-      // First run: seed KV from local file
-      const localData = readLocalFile();
-      await kv.set(KV_KEY, localData);
-      return localData;
-    } catch {
-      return readLocalFile();
-    }
-  }
-  return readLocalFile();
+  await ensureSchema();
+
+  const { rows } = await query<{ data: SiteContent }>(
+    "SELECT data FROM site_content WHERE key = $1",
+    [CONTENT_KEY]
+  );
+
+  if (rows.length > 0 && rows[0].data) return rows[0].data;
+
+  const seed = readSeedFile();
+  await saveContent(seed);
+  return seed;
 }
 
-// Save content: KV in production, local file in development
+/** Persists the full site content document to Postgres. */
 export async function saveContent(content: SiteContent): Promise<void> {
-  if (hasKV()) {
-    try {
-      const { kv } = await import("@vercel/kv");
-      await kv.set(KV_KEY, content);
-    } catch (e) {
-      console.error("Failed to save to KV:", e);
-    }
-  }
-  // Always save locally in development
-  if (!process.env.VERCEL) {
-    writeLocalFile(content);
-  }
+  await ensureSchema();
+  await query(
+    `INSERT INTO site_content (key, data, updated_at)
+     VALUES ($1, $2::jsonb, now())
+     ON CONFLICT (key)
+     DO UPDATE SET data = EXCLUDED.data, updated_at = now()`,
+    [CONTENT_KEY, JSON.stringify(content)]
+  );
 }

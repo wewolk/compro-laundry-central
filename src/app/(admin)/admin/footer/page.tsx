@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useContent, PageHeader, SaveButton, Card, InputField, TextareaField } from "../_components";
 
 export default function FooterAdminPage() {
-  const { content, loading, saving, message, saveContent } = useContent();
+  const { content, loading, saving, dirty, message, updateContent, saveContent } = useContent();
   const [newMenu, setNewMenu] = useState({ label: "", href: "" });
 
   if (loading || !content) return <p style={{ padding: "40px", color: "#64748b" }}>Memuat data...</p>;
@@ -12,7 +12,7 @@ export default function FooterAdminPage() {
   const footer = content.footer;
 
   const updateField = (field: string, value: string) => {
-    saveContent({ ...content, footer: { ...footer, [field]: value } });
+    updateContent({ ...content, footer: { ...footer, [field]: value } });
   };
 
   const addMenuItem = () => {
@@ -21,7 +21,7 @@ export default function FooterAdminPage() {
       ...content,
       footer: { ...footer, menuItems: [...footer.menuItems, { label: newMenu.label, href: newMenu.href }] },
     };
-    saveContent(updated);
+    updateContent(updated);
     setNewMenu({ label: "", href: "" });
   };
 
@@ -30,7 +30,7 @@ export default function FooterAdminPage() {
       ...content,
       footer: { ...footer, menuItems: footer.menuItems.filter((_, i) => i !== index) },
     };
-    saveContent(updated);
+    updateContent(updated);
   };
 
   const updateMenuItem = (index: number, field: string, value: string) => {
@@ -41,13 +41,13 @@ export default function FooterAdminPage() {
         menuItems: footer.menuItems.map((item, i) => i === index ? { ...item, [field]: value } : item),
       },
     };
-    saveContent(updated);
+    updateContent(updated);
   };
 
   return (
     <>
       <PageHeader title="🦶 Kelola Footer" subtitle="Edit footer yang tampil di semua halaman website" />
-      <SaveButton onClick={() => saveContent(content)} saving={saving} message={message} />
+      <SaveButton onClick={() => saveContent()} saving={saving} message={message} dirty={dirty} />
 
       <div style={{ display: "grid", gap: "24px", marginTop: "24px" }}>
         <Card>

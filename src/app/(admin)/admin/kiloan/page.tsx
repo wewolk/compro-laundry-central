@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useContent, PageHeader, SaveButton, Card, InputField, TextareaField } from "../_components";
 
 export default function KiloanPage() {
-  const { content, loading, saving, message, saveContent } = useContent();
+  const { content, loading, saving, dirty, message, updateContent, saveContent } = useContent();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", description: "", features: "", iconType: "clock", isPopular: false });
 
@@ -31,7 +31,7 @@ export default function KiloanPage() {
         isPopular: form.isPopular,
       }],
     };
-    saveContent(updated);
+    updateContent(updated);
     resetForm();
   };
 
@@ -58,19 +58,19 @@ export default function KiloanPage() {
           : k
       ),
     };
-    saveContent(updated);
+    updateContent(updated);
     resetForm();
   };
 
   const handleDelete = (id: string) => {
-    if (!confirm("Yakin hapus layanan kiloan ini?")) return;
-    saveContent({ ...content, kiloan: kiloan.filter((k) => k.id !== id) });
+    if (!confirm("Yakin hapus layanan kiloan ini? Perubahan baru permanen setelah klik Simpan.")) return;
+    updateContent({ ...content, kiloan: kiloan.filter((k) => k.id !== id) });
   };
 
   return (
     <>
       <PageHeader title="🧺 Kelola Laundry Kiloan" subtitle="CRUD kartu layanan kiloan di halaman Layanan" />
-      <SaveButton onClick={() => saveContent(content)} saving={saving} message={message} />
+      <SaveButton onClick={() => saveContent()} saving={saving} message={message} dirty={dirty} />
 
       <Card style={{ marginTop: "24px", marginBottom: "24px", border: editingId ? "2px solid #085F80" : "2px dashed #cbd5e1" }}>
         <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#085F80", marginBottom: "16px" }}>

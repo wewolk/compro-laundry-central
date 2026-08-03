@@ -21,7 +21,7 @@ export interface SiteContent {
     menuItems: { label: string; href: string }[];
     copyright: string;
   };
-  gallery: { id: number; src: string; alt: string; category: string; type: string }[];
+  gallery: { id: number; src: string; alt: string; category: string; type: string; poster?: string }[];
 }
 
 let cachedContent: SiteContent | null = null;

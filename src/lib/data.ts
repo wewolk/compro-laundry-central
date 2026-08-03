@@ -52,6 +52,8 @@ export interface GalleryItem {
   alt: string;
   category: string;
   type: string;
+  /** Poster frame for video entries. */
+  poster?: string;
   /** ImageKit fileId, present for images uploaded through the admin panel. */
   fileId?: string;
 }

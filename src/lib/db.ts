@@ -1,4 +1,13 @@
 import { Pool } from "pg";
+import net from "net";
+
+// Node 20+ enables Happy Eyeballs (autoSelectFamily) by default, which races
+// IPv6 and IPv4 sockets. Against Neon's pooler that race never resolves and
+// every connection dies with ETIMEDOUT even though plain psql connects fine.
+// Disabling it restores the single-address behaviour pg expects.
+if (typeof net.setDefaultAutoSelectFamily === "function") {
+  net.setDefaultAutoSelectFamily(false);
+}
 
 // Neon (or any Postgres) connection pool, cached across hot reloads in dev so
 // we don't exhaust connections.

@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: "ik.imagekit.io",
         pathname: "/cloyptjl8/**",
       },
+      {
+        protocol: "https",
+        hostname: "tile.openstreetmap.org",
+        pathname: "/**",
+      },
     ],
   },
 };

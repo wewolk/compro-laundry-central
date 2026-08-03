@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { uploadMedia, type MediaKind } from "@/lib/media";
 
 export interface SiteContent {
   settings: {
@@ -21,11 +22,16 @@ export interface SiteContent {
     menuItems: { label: string; href: string }[];
     copyright: string;
   };
-  gallery: { id: number; src: string; alt: string; category: string; type: string }[];
+  gallery: { id: number; src: string; alt: string; category: string; type: string; poster?: string; fileId?: string }[];
 }
 
 export function useContent() {
+  // `content` is a local draft: edits stay in the browser until the admin
+  // presses Simpan. `saved` is the last version persisted to the server and is
+  // only used to detect unsaved changes.
   const [content, setContent] = useState<SiteContent | null>(null);
+  const savedRef = useRef<string>("");
+  const [dirty, setDirty] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -34,23 +40,45 @@ export function useContent() {
     let cancelled = false;
     fetch("/api/content")
       .then((res) => res.json())
-      .then((data) => { if (!cancelled) setContent(data); })
+      .then((data) => {
+        if (cancelled) return;
+        savedRef.current = JSON.stringify(data);
+        setContent(data);
+      })
       .catch(() => { if (!cancelled) setMessage({ text: "Gagal memuat data", type: "error" }); })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
   }, []);
 
-  const saveContent = async (newContent: SiteContent) => {
+  /** Updates the local draft only — nothing is sent to the server. */
+  const updateContent = useCallback((next: SiteContent) => {
+    setContent(next);
+    setDirty(JSON.stringify(next) !== savedRef.current);
+  }, []);
+
+  // Guard against losing a draft by closing the tab or navigating away
+  useEffect(() => {
+    if (!dirty) return;
+    const warn = (e: BeforeUnloadEvent) => e.preventDefault();
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
+
+  const saveContent = async (newContent?: SiteContent) => {
+    const payload = newContent ?? content;
+    if (!payload) return;
     setSaving(true);
     setMessage({ text: "", type: "" });
     try {
       const res = await fetch("/api/content", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newContent),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
-        setContent(newContent);
+        savedRef.current = JSON.stringify(payload);
+        setContent(payload);
+        setDirty(false);
         setMessage({ text: "✅ Berhasil disimpan!", type: "success" });
         setTimeout(() => setMessage({ text: "", type: "" }), 3000);
       } else {
@@ -63,22 +91,47 @@ export function useContent() {
     }
   };
 
-  const uploadImage = async (file: File): Promise<string | null> => {
-    const formData = new FormData();
-    formData.append("file", file);
+  /**
+   * Compresses (images) and uploads straight to ImageKit. The caller receives
+   * the URL and media kind, and must fold it into the draft itself.
+   */
+  const uploadFile = async (
+    file: File,
+    onProgress?: (percent: number) => void
+  ): Promise<{ url: string; kind: MediaKind; poster?: string; fileId: string } | null> => {
     try {
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (data.success) return data.url;
-      setMessage({ text: `❌ ${data.error}`, type: "error" });
-      return null;
-    } catch {
-      setMessage({ text: "❌ Gagal upload", type: "error" });
+      const result = await uploadMedia(file, { onProgress });
+      return {
+        url: result.url,
+        kind: result.kind,
+        poster: result.thumbnailUrl,
+        fileId: result.fileId,
+      };
+    } catch (e) {
+      const text = e instanceof Error ? e.message : "Gagal upload";
+      setMessage({ text: `❌ ${text}`, type: "error" });
       return null;
     }
   };
 
-  return { content, loading, saving, message, saveContent, uploadImage, setMessage };
+  /** Back-compat helper for image-only callers. */
+  const uploadImage = async (file: File): Promise<string | null> => {
+    const result = await uploadFile(file);
+    return result?.url ?? null;
+  };
+
+  return {
+    content,
+    loading,
+    saving,
+    dirty,
+    message,
+    updateContent,
+    saveContent,
+    uploadFile,
+    uploadImage,
+    setMessage,
+  };
 }
 
 // Reusable UI components
@@ -91,9 +144,19 @@ export function PageHeader({ title, subtitle }: { title: string; subtitle?: stri
   );
 }
 
-export function SaveButton({ onClick, saving, message }: { onClick: () => void; saving: boolean; message: { text: string; type: string } }) {
+export function SaveButton({
+  onClick,
+  saving,
+  message,
+  dirty = false,
+}: {
+  onClick: () => void;
+  saving: boolean;
+  message: { text: string; type: string };
+  dirty?: boolean;
+}) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "16px", marginTop: "24px" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "16px", marginTop: "24px", flexWrap: "wrap" }}>
       <button
         onClick={onClick}
         disabled={saving}
@@ -110,6 +173,11 @@ export function SaveButton({ onClick, saving, message }: { onClick: () => void; 
       >
         {saving ? "Menyimpan..." : "💾 Simpan Perubahan"}
       </button>
+      {dirty && !saving && (
+        <span style={{ fontSize: "13px", fontWeight: 600, color: "#b45309", background: "#fef3c7", padding: "6px 12px", borderRadius: "20px" }}>
+          ● Ada perubahan belum disimpan
+        </span>
+      )}
       {message.text && (
         <span style={{ fontSize: "14px", fontWeight: 600, color: message.type === "success" ? "#16a34a" : "#ef4444" }}>
           {message.text}

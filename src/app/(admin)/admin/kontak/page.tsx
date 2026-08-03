@@ -1,26 +1,26 @@
 "use client";
 
-import { useContent, PageHeader, SaveButton, Card, InputField, TextareaField } from "../_components";
+import { useContent, PageHeader, SaveButton, Card, InputField } from "../_components";
 
 export default function KontakAdminPage() {
-  const { content, loading, saving, message, saveContent } = useContent();
+  const { content, loading, saving, dirty, message, updateContent, saveContent } = useContent();
 
   if (loading || !content) return <p style={{ padding: "40px", color: "#64748b" }}>Memuat data...</p>;
 
   const s = content.settings;
 
   const update = (field: string, value: string) => {
-    saveContent({ ...content, settings: { ...s, [field]: value } });
+    updateContent({ ...content, settings: { ...s, [field]: value } });
   };
 
   const updateHours = (field: string, value: string) => {
-    saveContent({ ...content, settings: { ...s, operationalHours: { ...s.operationalHours, [field]: value } } });
+    updateContent({ ...content, settings: { ...s, operationalHours: { ...s.operationalHours, [field]: value } } });
   };
 
   return (
     <>
-      <PageHeader title="📍 Kontak & Lokasi" subtitle="Edit informasi kontak, alamat, dan peta lokasi" />
-      <SaveButton onClick={() => saveContent(content)} saving={saving} message={message} />
+      <PageHeader title="📍 Kontak & Lokasi" subtitle="Edit informasi kontak, alamat, dan peta lokasi. Klik Simpan setelah selesai." />
+      <SaveButton onClick={() => saveContent()} saving={saving} message={message} dirty={dirty} />
 
       <div style={{ display: "grid", gap: "24px", marginTop: "24px" }}>
         <Card>
@@ -40,12 +40,10 @@ export default function KontakAdminPage() {
         <Card>
           <h3 style={{ fontSize: "16px", fontWeight: 700, color: "#085F80", marginBottom: "16px" }}>Peta & Maps</h3>
           <InputField label="Link Google Maps (untuk Petunjuk Arah)" value={s.mapLink} onChange={(v) => update("mapLink", v)} />
-          <TextareaField label="Embed URL Google Maps (iframe src)" value={s.mapEmbedUrl} onChange={(v) => update("mapEmbedUrl", v)} rows={3} />
-          {s.mapEmbedUrl && (
-            <div style={{ marginTop: "16px", borderRadius: "12px", overflow: "hidden", height: "300px" }}>
-              <iframe src={s.mapEmbedUrl} width="100%" height="100%" style={{ border: 0 }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
-            </div>
-          )}
+          <p style={{ fontSize: "13px", color: "#94a3b8", marginTop: "-8px", marginBottom: "16px" }}>
+            💡 Peta di website memakai gambar statis (tanpa iframe) yang selalu menunjuk outlet.
+            Link ini hanya dipakai untuk tombol Petunjuk Arah saat peta diklik.
+          </p>
         </Card>
       </div>
     </>

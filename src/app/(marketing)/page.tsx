@@ -14,14 +14,39 @@ const MAX_HERO_SLIDES = 5;
 const MAX_GALLERY_PREVIEW = 4;
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i;
 
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"foto" | "video">("foto");
   const { content } = useSiteContent();
   const paket = content?.paket ?? [];
   const settings = content?.settings;
+  const waNumber = settings?.waNumber ?? "0851-8184-0082";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LaundryService",
+    name: "Central Laundry Express",
+    description:
+      "Laundry express Purbalingga dengan layanan antar jemput, cuci kiloan, cuci setrika, dan perawatan pakaian higienis.",
+    telephone: waNumber,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Purbalingga",
+      addressRegion: "Jawa Tengah",
+      addressCountry: "ID",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: OUTLET_LOCATION.lat,
+      longitude: OUTLET_LOCATION.lng,
+    },
+    areaServed: ["Klampok", "Kalimanah", "Purbalingga", "Bobotsari", "Kutasari", "Karangmoncol", "Kaligondang", "Mrebet", "Bukateja", "Padamara", "Kertanegara", "Kemangkon", "Karanganyar", "Kalibagor", "Bojongsari", "Karangjambu"],
+    serviceType: ["Laundry kiloan", "Cuci setrika", "Antar jemput laundry", "Laundry express"],
+    openingHours: ["Mo-Sa 07:00-20:00", "Su 09:00-17:00"],
+    hasMap: settings?.mapLink || OUTLET_LOCATION.mapLink,
+    url: "/",
+  };
 
-  // Hero slides come from the gallery images, deduplicated so repeated
-  // placeholder entries don't produce identical slides, capped at 5.
+
   const heroImages = Array.from(
     new Set(
       (content?.gallery ?? [])
@@ -45,6 +70,8 @@ export default function Home() {
   return (
     <>
       <Navbar />
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Hero Section */}
       <section id="beranda" className="hero">
@@ -538,6 +565,27 @@ export default function Home() {
             <a href="tel:+6285181840082" className="cta-phone-link">
               0851-8184-0082
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Local SEO Content */}
+      <section style={{ backgroundColor: "var(--bg-white)" }}>
+        <div className="container" style={{ padding: "32px 0 12px" }}>
+          <div className="section-header" style={{ marginBottom: "18px" }}>
+            <h2 className="section-title">Laundry Purbalingga yang Cepat, Bersih, dan Praktis</h2>
+            <div className="section-line"></div>
+          </div>
+          <div style={{ maxWidth: "900px", color: "var(--text-muted)", lineHeight: 1.8, fontSize: "16px" }}>
+            <p style={{ marginBottom: "14px" }}>
+              Central Laundry Express hadir sebagai pilihan jasa laundry Purbalingga untuk Anda yang ingin hasil bersih tanpa repot. Kami melayani laundry kiloan, cuci setrika, dan perawatan pakaian dengan proses yang higienis, rapi, dan cepat selesai.
+            </p>
+            <p style={{ marginBottom: "14px" }}>
+              Cocok untuk warga rumah tangga, anak kos, pekerja sibuk, hingga kebutuhan usaha yang membutuhkan layanan antar jemput laundry Purbalingga. Pakaian Anda ditangani dengan standar yang nyaman dipakai sehari-hari, harum, dan tetap terawat.
+            </p>
+            <p>
+              Jika Anda mencari laundry Purbalingga yang responsif, mudah dihubungi, dan siap membantu kebutuhan cuci harian maupun item khusus, silakan pesan lewat WhatsApp atau lihat halaman layanan kami untuk informasi paket lengkap.
+            </p>
           </div>
         </div>
       </section>

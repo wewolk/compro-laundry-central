@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useContent, PageHeader, Card, InputField } from "../_components";
+import { useContent, PageHeader, SaveButton, Card, InputField } from "../_components";
 
 export default function SettingsPage() {
-  const { content, loading, saveContent } = useContent();
+  const { content, loading, saving, dirty, message, updateContent, saveContent } = useContent();
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [pwMessage, setPwMessage] = useState({ text: "", type: "" });
@@ -15,7 +15,7 @@ export default function SettingsPage() {
   const s = content.settings;
 
   const update = (field: string, value: string) => {
-    saveContent({ ...content, settings: { ...s, [field]: value } });
+    updateContent({ ...content, settings: { ...s, [field]: value } });
   };
 
   const handleChangePassword = async () => {
@@ -58,7 +58,8 @@ export default function SettingsPage() {
 
   return (
     <>
-      <PageHeader title="⚙️ Pengaturan" subtitle="Atur link WhatsApp, Instagram, dan keamanan akun" />
+      <PageHeader title="⚙️ Pengaturan" subtitle="Atur link WhatsApp, Instagram, dan keamanan akun. Klik Simpan setelah selesai." />
+      <SaveButton onClick={() => saveContent()} saving={saving} message={message} dirty={dirty} />
 
       <div style={{ display: "grid", gap: "24px", marginTop: "24px" }}>
         <Card>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useContent, PageHeader, SaveButton, Card, InputField } from "../_components";
 
 export default function PaketPage() {
-  const { content, loading, saving, message, saveContent } = useContent();
+  const { content, loading, saving, dirty, message, updateContent, saveContent } = useContent();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newPaket, setNewPaket] = useState({ name: "", features: "", isPopular: false });
 
@@ -24,14 +24,14 @@ export default function PaketPage() {
         isPopular: newPaket.isPopular,
       }],
     };
-    saveContent(updated);
+    updateContent(updated);
     setNewPaket({ name: "", features: "", isPopular: false });
   };
 
   const handleDelete = (id: string) => {
-    if (!confirm("Yakin hapus paket ini?")) return;
+    if (!confirm("Yakin hapus paket ini? Perubahan baru permanen setelah klik Simpan.")) return;
     const updated = { ...content, paket: paket.filter((p) => p.id !== id) };
-    saveContent(updated);
+    updateContent(updated);
   };
 
   const handleEdit = (id: string) => {
@@ -51,7 +51,7 @@ export default function PaketPage() {
           : p
       ),
     };
-    saveContent(updated);
+    updateContent(updated);
     setEditingId(null);
     setNewPaket({ name: "", features: "", isPopular: false });
   };
@@ -64,7 +64,7 @@ export default function PaketPage() {
   return (
     <>
       <PageHeader title="📦 Kelola Paket" subtitle="Tambah, edit, atau hapus kartu paket di section &quot;Pilihan Paket Kami&quot;" />
-      <SaveButton onClick={() => saveContent(content)} saving={saving} message={message} />
+      <SaveButton onClick={() => saveContent()} saving={saving} message={message} dirty={dirty} />
 
       {/* Form tambah/edit */}
       <Card style={{ marginTop: "24px", marginBottom: "24px", border: editingId ? "2px solid #085F80" : "2px dashed #cbd5e1" }}>

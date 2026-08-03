@@ -3,12 +3,14 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { useSiteContent } from "@/hooks/useContent";
+import StaticMap from "@/components/StaticMap";
+import { OUTLET_LOCATION } from "@/lib/location";
 
 export default function KontakPage() {
   const { content } = useSiteContent();
   const settings = content?.settings;
   const waLink = settings?.waLink ?? "https://wa.me/6285181840082";
-  const mapLink = settings?.mapLink ?? "https://maps.google.com/?q=-7.4244,109.2302";
+  const mapLink = settings?.mapLink || OUTLET_LOCATION.mapLink;
 
   return (
     <>
@@ -106,15 +108,12 @@ export default function KontakPage() {
               <div className="contact-map-card">
                 <h3 className="contact-map-title">Peta Lokasi</h3>
                 <div className="contact-map-iframe-wrapper">
-                  <iframe
-                    src={settings?.mapEmbedUrl ?? "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.2736181156826!2d109.2302196!3d-7.4243912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjUnMjcuOCJTIDEwOcKwMTMnNDguOCJF!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen={true}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  ></iframe>
+                  <StaticMap
+                    lat={OUTLET_LOCATION.lat}
+                    lng={OUTLET_LOCATION.lng}
+                    href={mapLink}
+                    label={OUTLET_LOCATION.name}
+                  />
                 </div>
                 <a
                   href={mapLink}

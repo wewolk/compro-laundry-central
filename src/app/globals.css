@@ -129,6 +129,13 @@ img {
   background: none;
   border: none;
   cursor: pointer;
+  /* The three 2.5px bars only span ~24x20; pad the button so the tap target
+     clears the 44px WCAG 2.5.5 minimum without moving the icon. */
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
 }
 
 .mobile-menu-btn span {
@@ -787,13 +794,20 @@ img {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  /* Links now carry their own 44px touch height, so the extra gap would
+     double-space the list. */
+  gap: 0;
 }
 
 .footer-link a {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.6);
   transition: color 0.2s ease;
+  /* Inline anchors are only as tall as their text (~19px); pad them out so
+     touch targets clear the 44px WCAG 2.5.5 minimum. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .footer-link a:hover {
@@ -973,6 +987,16 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Keeps the circle from being squashed by the flex row when a photo is used
+     instead of initials. */
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-name {
@@ -1061,6 +1085,87 @@ img {
   font-weight: 600;
 }
 
+/* Static map: OSM tile mosaic, centred on the outlet and clipped by its box */
+.static-map {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: #e8e4dc;
+  cursor: pointer;
+}
+
+/* Beranda reuses the rounded card frame from the old placeholder */
+a.static-map.map-placeholder {
+  display: block;
+  height: 380px;
+  padding: 0;
+  gap: 0;
+}
+
+.static-map-canvas {
+  position: absolute;
+  /* Anchored at the box centre, then shifted so the coordinate lands there */
+  top: 50%;
+  left: 50%;
+  transform-origin: center;
+  transition: scale 0.4s ease;
+}
+
+.static-map:hover .static-map-canvas {
+  scale: 1.04;
+}
+
+.static-map-pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Anchor the pin tip on the exact coordinate */
+  transform: translate(-50%, -100%);
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.35));
+  line-height: 0;
+  z-index: 2;
+}
+
+.static-map-badge {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 30px;
+  background-color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(6px);
+  color: var(--primary, #085f80);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+  transition: background-color 0.2s ease;
+  z-index: 3;
+}
+
+.static-map:hover .static-map-badge {
+  background-color: #ffffff;
+}
+
+.static-map-attribution {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.75);
+  color: #475569;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
 /* CTA Banner Section */
 .cta-banner {
   background-color: var(--primary);
@@ -1135,6 +1240,7 @@ img {
   transition: opacity 0.2s ease;
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
 }
 
 .cta-phone-link:hover {
@@ -1225,7 +1331,30 @@ img {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
+  /* Section padding is authored for desktop (100px); at phone/tablet widths
+     that leaves large dead bands between sections. */
+  .hero {
+    padding: 32px 0 56px 0;
+  }
+
+  .features,
+  .pricing,
+  .gallery,
+  .steps,
+  .testimonials,
+  .contact-location {
+    padding: 56px 0;
+  }
+
+  .cta-banner {
+    padding: 48px 0;
+  }
+
+  .section-header {
+    margin-bottom: 36px;
+  }
+
   .hero-title {
     font-size: 36px;
   }
@@ -1257,7 +1386,14 @@ img {
   .gallery-grid {
     grid-template-columns: 1fr;
   }
-  
+
+  /* The 1024px rule above puts a 16/9 aspect-ratio on the last column's
+     items. Once the grid is a single column that ratio drives width from
+     the inline height (230px -> 409px), overflowing narrow viewports. */
+  .gallery-column:last-child .gallery-item {
+    aspect-ratio: auto;
+  }
+
   .gallery-column:last-child {
     grid-column: span 1;
     flex-direction: column;
@@ -1275,6 +1411,22 @@ img {
 }
 
 @media (max-width: 640px) {
+  /* 36px still wraps the headline onto four lines at 360px. */
+  .hero-title {
+    font-size: 30px;
+    line-height: 1.15;
+  }
+
+  /* .hero-content already contributes a 24px gap; the extra margin made the
+     paragraph-to-button gap the largest in the hero. */
+  .hero-actions {
+    margin-top: 0;
+  }
+
+  .section-title {
+    line-height: 1.25;
+  }
+
   .features-grid {
     grid-template-columns: 1fr;
   }
@@ -1338,6 +1490,9 @@ img {
 .breadcrumb a {
   color: var(--text-muted);
   transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .breadcrumb a:hover {
@@ -2874,6 +3029,40 @@ img {
   transform: scale(1.1);
 }
 
+/* Click-to-play video: poster frame until the visitor presses play */
+.gallery-video-trigger {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: none;
+  background: #0f172a;
+  cursor: pointer;
+  display: block;
+}
+
+.gallery-video-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.gallery-card:hover .gallery-video-poster,
+.gallery-item:hover .gallery-video-poster {
+  transform: scale(1.05);
+}
+
+.gallery-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #0f172a;
+  display: block;
+}
+
 /* Play/Duration Badge on top right of video */
 .gallery-duration-badge {
   position: absolute;
@@ -2969,8 +3158,9 @@ img {
 }
 
 .contact-method-link {
-  display: inline-block;
-  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);

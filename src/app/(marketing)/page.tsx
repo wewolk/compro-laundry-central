@@ -4,10 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import HeroSlider from "@/components/HeroSlider";
+import GalleryMedia from "@/components/GalleryMedia";
+import StaticMap from "@/components/StaticMap";
+import { OUTLET_LOCATION } from "@/lib/location";
 import { useSiteContent } from "@/hooks/useContent";
 
 const FALLBACK_HERO = "/hero_laundry.png";
 const MAX_HERO_SLIDES = 5;
+const MAX_GALLERY_PREVIEW = 4;
+const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i;
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"foto" | "video">("foto");
@@ -25,6 +30,17 @@ export default function Home() {
     )
   ).slice(0, MAX_HERO_SLIDES);
   const slides = heroImages.length > 0 ? heroImages : [FALLBACK_HERO];
+
+  // Beranda shows a 4-item teaser of the gallery, split by the active tab
+  const wantedType = activeTab === "video" ? "video" : "image";
+  const visibleMedia = (content?.gallery ?? [])
+    .map((item) => ({
+      ...item,
+      // A row flagged as video but holding a placeholder image is really a photo
+      type: item.type === "video" && !VIDEO_EXTENSIONS.test(item.src) ? "image" : item.type,
+    }))
+    .filter((item) => item.type === wantedType && item.src)
+    .slice(0, MAX_GALLERY_PREVIEW);
 
   return (
     <>
@@ -237,55 +253,28 @@ export default function Home() {
             </div>
           </div>
 
-          {activeTab === "foto" ? (
+          {visibleMedia.length > 0 ? (
             <div className="gallery-grid">
-              {/* Column 1: Stacked */}
-              <div className="gallery-column">
-                <div className="gallery-item" style={{ height: "230px" }}>
-                  <Image
-                    src="/hero_laundry.png"
-                    alt="Gallery item 1"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-                <div className="gallery-item" style={{ height: "230px" }}>
-                  <Image
-                    src="/hero_laundry.png"
-                    alt="Gallery item 2"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-
-              {/* Column 2: Large Item */}
-              <div className="gallery-column">
-                <div className="gallery-item" style={{ height: "484px" }}>
-                  <Image
-                    src="/hero_laundry.png"
-                    alt="Gallery item 3"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-
-              {/* Column 3: Stacked / Single */}
-              <div className="gallery-column">
-                <div className="gallery-item" style={{ height: "230px" }}>
-                  <Image
-                    src="/hero_laundry.png"
-                    alt="Gallery item 4"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
+              {[0, 1, 2].map((colIndex) => {
+                const column = visibleMedia.filter((_, i) => i % 3 === colIndex);
+                if (column.length === 0) return null;
+                // Middle column runs as one tall item to keep the mosaic rhythm
+                const height = colIndex === 1 && column.length === 1 ? "484px" : "230px";
+                return (
+                  <div key={colIndex} className="gallery-column">
+                    {column.map((item) => (
+                      <div key={item.id} className="gallery-item" style={{ height }}>
+                        <GalleryMedia
+                          src={item.src}
+                          alt={item.alt}
+                          type={item.type}
+                          poster={item.poster}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <div
@@ -303,7 +292,11 @@ export default function Home() {
                   <polygon points="23 7 16 12 23 17 23 7"/>
                   <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
                 </svg>
-                <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.8)" }}>Video Dokumentasi Layanan Segera Hadir</p>
+                <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.8)" }}>
+                  {activeTab === "video"
+                    ? "Video Dokumentasi Layanan Segera Hadir"
+                    : "Foto Dokumentasi Segera Hadir"}
+                </p>
               </div>
             </div>
           )}
@@ -394,14 +387,21 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="testimonial-text">
-                  &ldquo;Paling suka sama kurirnya yang ramah. Nimbang transparan di depan rumah, harganya masuk akal banget buat ibu rumah tangga.&rdquo;
+                  &ldquo;Nge-laundry di sini hemat waktu banget buat jadwal kuliah yang padat. Diambil pagi, sore sudah bisa dipakai lagi.&rdquo;
                 </p>
               </div>
               <div className="testimonial-user">
-                <div className="user-avatar">SL</div>
+                <div className="user-avatar">
+                  <Image
+                    src="/testimoni_firman.jpg"
+                    alt="Firman Maulana"
+                    width={48}
+                    height={48}
+                  />
+                </div>
                 <div>
-                  <h4 className="user-name">Sari Lestari</h4>
-                  <p className="user-role">Ibu Rumah Tangga</p>
+                  <h4 className="user-name">Firman Maulana</h4>
+                  <p className="user-role">Mahasiswa</p>
                 </div>
               </div>
             </div>
@@ -417,14 +417,21 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="testimonial-text">
-                  &ldquo;Cucian satuannya detail banget kerjanya. Jas dan kebaya saya tetap awet dan bersih sempurna. Top markotop!&rdquo;
+                  &ldquo;Sebagai anak kuliahan, laundry kiloan di sini penyelamat banget. Harganya ramah kantong mahasiswa, cucian selalu wangi dan rapi tiap diambil.&rdquo;
                 </p>
               </div>
               <div className="testimonial-user">
-                <div className="user-avatar">RN</div>
+                <div className="user-avatar">
+                  <Image
+                    src="/testimoni_naufal.jpg"
+                    alt="Naufal Maulana Izzuddin"
+                    width={48}
+                    height={48}
+                  />
+                </div>
                 <div>
-                  <h4 className="user-name">Rina Natalia</h4>
-                  <p className="user-role">Guru</p>
+                  <h4 className="user-name">Naufal Maulana Izzuddin</h4>
+                  <p className="user-role">Mahasiswa</p>
                 </div>
               </div>
             </div>
@@ -496,26 +503,13 @@ export default function Home() {
             </div>
 
             <div>
-              {settings?.mapEmbedUrl ? (
-                <iframe
-                  src={settings.mapEmbedUrl}
-                  title="Peta Lokasi Central Laundry Express"
-                  className="map-placeholder"
-                  style={{ border: 0, width: "100%" }}
-                  loading="lazy"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
-              ) : (
-                <div className="map-placeholder">
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
-                    <line x1="9" y1="3" x2="9" y2="18" />
-                    <line x1="15" y1="6" x2="15" y2="21" />
-                  </svg>
-                  <span className="map-placeholder-text">Peta Lokasi Interaktif</span>
-                </div>
-              )}
+              <StaticMap
+                lat={OUTLET_LOCATION.lat}
+                lng={OUTLET_LOCATION.lng}
+                href={settings?.mapLink || OUTLET_LOCATION.mapLink}
+                label={OUTLET_LOCATION.name}
+                className="map-placeholder"
+              />
             </div>
           </div>
         </div>

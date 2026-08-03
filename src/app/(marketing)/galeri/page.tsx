@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import GalleryMedia from "@/components/GalleryMedia";
 import { useSiteContent } from "@/hooks/useContent";
 
 const WA_LINK =
   "https://wa.me/6285181840082?text=Halo%20Central%20Laundry%20Express,%20saya%20ingin%20memesan%20layanan%20laundry.";
+
+const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i;
 
 type MediaType = "all" | "image" | "video";
 type Category = "semua" | "proses-pencucian" | "penyetrikaan" | "antar-jemput" | "fasilitas" | "tim-kami";
@@ -17,6 +19,7 @@ interface GalleryItem {
   alt: string;
   type: string;
   category: string;
+  poster?: string;
 }
 
 export default function GaleriPage() {
@@ -24,7 +27,12 @@ export default function GaleriPage() {
   const [category, setCategory] = useState<Category>("semua");
   const { content } = useSiteContent();
 
-  const galleryData: GalleryItem[] = content?.gallery ?? [];
+  // Legacy rows can carry type "video" while still pointing at a placeholder
+  // image, so the effective type is derived from the file itself.
+  const galleryData: GalleryItem[] = (content?.gallery ?? []).map((item) => ({
+    ...item,
+    type: item.type === "video" && !VIDEO_EXTENSIONS.test(item.src) ? "image" : item.type,
+  }));
 
   // Filter items based on selected level 1 and level 2 filters
   const filteredItems = galleryData.filter((item) => {
@@ -98,89 +106,22 @@ export default function GaleriPage() {
 
           {/* Masonry-Style Columns */}
           <div className="gallery-masonry-cols">
-            {/* Column 1 */}
-            <div className="gallery-masonry-col">
-              {col1Items.map((item) => (
-                <div key={item.id} className="gallery-card">
-                  <div className="gallery-media-wrapper" style={{ aspectRatio: "1.4" }}>
-                    <Image
-                      src={item.src}
-                      alt={item.alt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      style={{ objectFit: "cover" }}
-                    />
-                    {item.type === "video" && (
-                      <>
-                        <div className="gallery-play-overlay">
-                          <div className="gallery-play-btn">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                              <polygon points="5 3 19 12 5 21 5 3" />
-                            </svg>
-                          </div>
-                        </div>
-                      </>
-                    )}
+            {[col1Items, col2Items, col3Items].map((column, colIndex) => (
+              <div key={colIndex} className="gallery-masonry-col">
+                {column.map((item) => (
+                  <div key={item.id} className="gallery-card">
+                    <div className="gallery-media-wrapper" style={{ aspectRatio: "1.4" }}>
+                      <GalleryMedia
+                        src={item.src}
+                        alt={item.alt}
+                        type={item.type}
+                        poster={item.poster}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Column 2 */}
-            <div className="gallery-masonry-col">
-              {col2Items.map((item) => (
-                <div key={item.id} className="gallery-card">
-                  <div className="gallery-media-wrapper" style={{ aspectRatio: "1.4" }}>
-                    <Image
-                      src={item.src}
-                      alt={item.alt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      style={{ objectFit: "cover" }}
-                    />
-                    {item.type === "video" && (
-                      <>
-                        <div className="gallery-play-overlay">
-                          <div className="gallery-play-btn">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                              <polygon points="5 3 19 12 5 21 5 3" />
-                            </svg>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Column 3 */}
-            <div className="gallery-masonry-col">
-              {col3Items.map((item) => (
-                <div key={item.id} className="gallery-card">
-                  <div className="gallery-media-wrapper" style={{ aspectRatio: "1.4" }}>
-                    <Image
-                      src={item.src}
-                      alt={item.alt}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      style={{ objectFit: "cover" }}
-                    />
-                    {item.type === "video" && (
-                      <>
-                        <div className="gallery-play-overlay">
-                          <div className="gallery-play-btn">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                              <polygon points="5 3 19 12 5 21 5 3" />
-                            </svg>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </section>

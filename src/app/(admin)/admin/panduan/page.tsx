@@ -39,17 +39,19 @@ const sections: Section[] = [
   },
   {
     id: "galeri",
-    title: "🖼️ Galeri & Slider Beranda",
+    title: "🖼️ Galeri, Video & Slider Beranda",
     intro:
-      "Foto pada menu Galeri dipakai di dua tempat: galeri di beranda dan slider foto besar di bagian paling atas beranda.",
+      "Menu Galeri menampung foto dan video. Isinya dipakai di tiga tempat: galeri halaman Galeri, tab Foto/Video di beranda, dan slider besar di bagian paling atas beranda.",
     steps: [
-      "Klik ➕ Tambah Foto Baru lalu pilih 📷 Ganti Foto untuk mengunggah gambar.",
-      "Isi keterangan foto (alt) agar website ramah pembaca layar dan mesin pencari.",
-      "Pilih kategori supaya foto tersusun rapi di galeri.",
-      "Atur urutan foto — foto pertama menjadi slide pertama di beranda.",
+      "Klik ➕ Tambah Media Baru lalu pilih 📁 Ganti Media untuk mengunggah foto atau video.",
+      "Foto otomatis dikompres (maksimal sisi terpanjang 1920px, format WebP) sebelum diunggah, jadi tidak perlu memperkecil sendiri.",
+      "Video menerima MP4, WebM, atau MOV dengan ukuran maksimal 50MB. Progres unggahan tampil dalam persen.",
+      "Isi keterangan (alt) agar website ramah pembaca layar dan mesin pencari.",
+      "Pilih kategori supaya media tersusun rapi di galeri.",
+      "Klik 💾 Simpan Perubahan — media yang sudah terunggah belum tampil di website sebelum disimpan.",
     ],
     note:
-      "Slider beranda memakai maksimal 5 foto pertama yang bertipe gambar. Foto ke-6 dan seterusnya tetap tampil di galeri, tapi tidak masuk slider. Foto yang sama tidak akan muncul dua kali sebagai slide.",
+      "Slider beranda hanya memakai foto (bukan video), maksimal 5 foto pertama. Video muncul di tab Video beranda dan di filter Videos halaman Galeri, ditampilkan sebagai thumbnail sampai pengunjung menekan tombol putar.",
   },
   {
     id: "kontak",

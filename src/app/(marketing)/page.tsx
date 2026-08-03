@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import HeroSlider from "@/components/HeroSlider";
 import GalleryMedia from "@/components/GalleryMedia";
@@ -386,14 +387,21 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="testimonial-text">
-                  &ldquo;Paling suka sama kurirnya yang ramah. Nimbang transparan di depan rumah, harganya masuk akal banget buat ibu rumah tangga.&rdquo;
+                  &ldquo;Nge-laundry di sini hemat waktu banget buat jadwal kuliah yang padat. Diambil pagi, sore sudah bisa dipakai lagi.&rdquo;
                 </p>
               </div>
               <div className="testimonial-user">
-                <div className="user-avatar">SL</div>
+                <div className="user-avatar">
+                  <Image
+                    src="/testimoni_firman.jpg"
+                    alt="Firman Maulana"
+                    width={48}
+                    height={48}
+                  />
+                </div>
                 <div>
-                  <h4 className="user-name">Sari Lestari</h4>
-                  <p className="user-role">Ibu Rumah Tangga</p>
+                  <h4 className="user-name">Firman Maulana</h4>
+                  <p className="user-role">Mahasiswa</p>
                 </div>
               </div>
             </div>
@@ -409,14 +417,21 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="testimonial-text">
-                  &ldquo;Cucian satuannya detail banget kerjanya. Jas dan kebaya saya tetap awet dan bersih sempurna. Top markotop!&rdquo;
+                  &ldquo;Sebagai anak kuliahan, laundry kiloan di sini penyelamat banget. Harganya ramah kantong mahasiswa, cucian selalu wangi dan rapi tiap diambil.&rdquo;
                 </p>
               </div>
               <div className="testimonial-user">
-                <div className="user-avatar">RN</div>
+                <div className="user-avatar">
+                  <Image
+                    src="/testimoni_naufal.jpg"
+                    alt="Naufal Maulana Izzuddin"
+                    width={48}
+                    height={48}
+                  />
+                </div>
                 <div>
-                  <h4 className="user-name">Rina Natalia</h4>
-                  <p className="user-role">Guru</p>
+                  <h4 className="user-name">Naufal Maulana Izzuddin</h4>
+                  <p className="user-role">Mahasiswa</p>
                 </div>
               </div>
             </div>

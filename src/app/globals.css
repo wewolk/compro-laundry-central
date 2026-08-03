@@ -129,6 +129,13 @@ img {
   background: none;
   border: none;
   cursor: pointer;
+  /* The three 2.5px bars only span ~24x20; pad the button so the tap target
+     clears the 44px WCAG 2.5.5 minimum without moving the icon. */
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
 }
 
 .mobile-menu-btn span {
@@ -787,13 +794,20 @@ img {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  /* Links now carry their own 44px touch height, so the extra gap would
+     double-space the list. */
+  gap: 0;
 }
 
 .footer-link a {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.6);
   transition: color 0.2s ease;
+  /* Inline anchors are only as tall as their text (~19px); pad them out so
+     touch targets clear the 44px WCAG 2.5.5 minimum. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .footer-link a:hover {
@@ -973,6 +987,16 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Keeps the circle from being squashed by the flex row when a photo is used
+     instead of initials. */
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-name {
@@ -1216,6 +1240,7 @@ a.static-map.map-placeholder {
   transition: opacity 0.2s ease;
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
 }
 
 .cta-phone-link:hover {
@@ -1306,7 +1331,30 @@ a.static-map.map-placeholder {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
+  /* Section padding is authored for desktop (100px); at phone/tablet widths
+     that leaves large dead bands between sections. */
+  .hero {
+    padding: 32px 0 56px 0;
+  }
+
+  .features,
+  .pricing,
+  .gallery,
+  .steps,
+  .testimonials,
+  .contact-location {
+    padding: 56px 0;
+  }
+
+  .cta-banner {
+    padding: 48px 0;
+  }
+
+  .section-header {
+    margin-bottom: 36px;
+  }
+
   .hero-title {
     font-size: 36px;
   }
@@ -1338,7 +1386,14 @@ a.static-map.map-placeholder {
   .gallery-grid {
     grid-template-columns: 1fr;
   }
-  
+
+  /* The 1024px rule above puts a 16/9 aspect-ratio on the last column's
+     items. Once the grid is a single column that ratio drives width from
+     the inline height (230px -> 409px), overflowing narrow viewports. */
+  .gallery-column:last-child .gallery-item {
+    aspect-ratio: auto;
+  }
+
   .gallery-column:last-child {
     grid-column: span 1;
     flex-direction: column;
@@ -1356,6 +1411,22 @@ a.static-map.map-placeholder {
 }
 
 @media (max-width: 640px) {
+  /* 36px still wraps the headline onto four lines at 360px. */
+  .hero-title {
+    font-size: 30px;
+    line-height: 1.15;
+  }
+
+  /* .hero-content already contributes a 24px gap; the extra margin made the
+     paragraph-to-button gap the largest in the hero. */
+  .hero-actions {
+    margin-top: 0;
+  }
+
+  .section-title {
+    line-height: 1.25;
+  }
+
   .features-grid {
     grid-template-columns: 1fr;
   }
@@ -1419,6 +1490,9 @@ a.static-map.map-placeholder {
 .breadcrumb a {
   color: var(--text-muted);
   transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 
 .breadcrumb a:hover {
@@ -3084,8 +3158,9 @@ a.static-map.map-placeholder {
 }
 
 .contact-method-link {
-  display: inline-block;
-  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);

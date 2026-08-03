@@ -7,6 +7,6 @@ export default function sitemap(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/api', '/admin']
     },
-    sitemap: 'https://www.centrallaundyexpress.com/sitemap.xml'
+    sitemap: 'https://www.centrallaundryexpress.com/sitemap.xml'
   }
 }

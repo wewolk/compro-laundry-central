@@ -16,7 +16,6 @@ const sidebarItems: SidebarItem[] = [
   { label: "📍 Kontak & Lokasi", href: "/admin/kontak" },
   { label: "🖼️ Galeri", href: "/admin/galeri" },
   { label: "⚙️ Pengaturan (WA/IG)", href: "/admin/settings" },
-  { label: "🦶 Footer", href: "/admin/footer" },
   {
     label: "📖 Panduan",
     href: "/admin/panduan",

@@ -561,22 +561,24 @@ export default function Home() {
               </svg>
               Pesan via WhatsApp
             </a>
-            <span style={{ fontSize: "16px", color: "white", opacity: 0.8 }}>Atau Hubungi:</span>
-            <a href="tel:+6285181840082" className="cta-phone-link">
-              0851-8184-0082
-            </a>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
+              <span style={{ fontSize: "16px", color: "white", opacity: 0.8 }}>Atau Hubungi:</span>
+              <a href="tel:+6285181840082" className="cta-phone-link">
+                0851-8184-0082
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Local SEO Content */}
       <section style={{ backgroundColor: "var(--bg-white)" }}>
-        <div className="container" style={{ padding: "32px 0 12px" }}>
+        <div className="container" style={{ paddingTop: "32px", paddingBottom: "12px" }}>
           <div className="section-header" style={{ marginBottom: "18px" }}>
             <h2 className="section-title">Laundry Purbalingga yang Cepat, Bersih, dan Praktis</h2>
             <div className="section-line"></div>
           </div>
-          <div style={{ maxWidth: "900px", color: "var(--text-muted)", lineHeight: 1.8, fontSize: "16px" }}>
+          <div style={{ maxWidth: "900px", margin: "0 auto", color: "var(--text-muted)", lineHeight: 1.8, fontSize: "16px" }}>
             <p style={{ marginBottom: "14px" }}>
               Central Laundry Express hadir sebagai pilihan jasa laundry Purbalingga untuk Anda yang ingin hasil bersih tanpa repot. Kami melayani laundry kiloan, cuci setrika, dan perawatan pakaian dengan proses yang higienis, rapi, dan cepat selesai.
             </p>

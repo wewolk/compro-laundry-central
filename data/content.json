@@ -170,7 +170,7 @@
     }
   ],
   "admin": {
-    "password": "admin123",
+    "password": "pbkdf2$100000$qKl93vLnH3KTzHTEie1vgA==$oUWHpdrOdeVLCm6by83muQWWVP0UHUh34mcfX4EG2SU=",
     "resetCode": "826540",
     "resetExpiry": 1785675707293
   }

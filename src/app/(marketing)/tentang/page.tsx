@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 
-
 const WA_LINK =
   "https://wa.me/6285181840082?text=Halo%20Central%20Laundry%20Express,%20saya%20ingin%20bertanya.";
 
@@ -330,7 +329,7 @@ export default function TentangKamiPage() {
         </div>
       </section>
 
-      {/* Tim Profesional */}
+      {/* Tim Profesional - Single photo from gallery, editable via admin */}
       <section className="team-section">
         <div className="container">
           <div className="team-header">
@@ -340,66 +339,19 @@ export default function TentangKamiPage() {
             </p>
           </div>
 
-          <div className="team-grid">
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Budi Santoso"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Budi Santoso</h4>
-              <p className="team-role">Founder & CEO</p>
-            </div>
-
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Sari Wijaya"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Sari Wijaya</h4>
-              <p className="team-role">Operations Manager</p>
-            </div>
-
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Andi Pratama"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Andi Pratama</h4>
-              <p className="team-role">Lead Technician</p>
-            </div>
-
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Lina Permata"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Lina Permata</h4>
-              <p className="team-role">Customer Experience</p>
+          <div className="team-single-wrapper">
+            <div className="team-photo-rect">
+              <Image
+                src="/hero_laundry.png"
+                alt="Tim Profesional Central Laundry Express"
+                fill
+                sizes="100vw"
+                style={{ objectFit: "cover" }}
+              />
             </div>
           </div>
         </div>
       </section>
-
 
       {/* Floating WA Button */}
       <a

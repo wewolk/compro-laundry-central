@@ -203,56 +203,6 @@ export default function TentangKamiPage() {
         </div>
       </section>
 
-      {/* Perjalanan Kami - Timeline */}
-      <section className="timeline-section">
-        <div className="container">
-          <div className="timeline-header">
-            <h2 className="timeline-title">Perjalanan Kami</h2>
-          </div>
-
-          <div className="timeline-container">
-            {/* 2014 - Left */}
-            <div className="timeline-item left">
-              <div className="timeline-dot"></div>
-              <div className="timeline-card">
-                <div className="timeline-year">2014</div>
-                <div className="timeline-milestone">Awal Mula</div>
-                <p className="timeline-desc">
-                  Membuka outlet pertama di pusat kota dengan konsep laundry
-                  mandiri higienis.
-                </p>
-              </div>
-            </div>
-
-            {/* 2018 - Right */}
-            <div className="timeline-item right">
-              <div className="timeline-dot"></div>
-              <div className="timeline-card">
-                <div className="timeline-year">2018</div>
-                <div className="timeline-milestone">Digitalisasi</div>
-                <p className="timeline-desc">
-                  Meluncurkan sistem tracking laundry berbasis QR Code untuk
-                  pelanggan setia.
-                </p>
-              </div>
-            </div>
-
-            {/* 2024 - Left */}
-            <div className="timeline-item left">
-              <div className="timeline-dot"></div>
-              <div className="timeline-card">
-                <div className="timeline-year">2024</div>
-                <div className="timeline-milestone">Express Hub</div>
-                <p className="timeline-desc">
-                  Pembukaan pusat pemrosesan berkapasitas besar dengan mesin
-                  industri ramah lingkungan.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Fasilitas & Teknologi */}
       <section className="facilities-section">
         <div className="container">

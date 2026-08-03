@@ -78,10 +78,7 @@ export default function Home() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="hero-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-8h-2v6h2V8z"/>
-              </svg>
-              Express 1 Hari Sampai!
+              Express 2 Jam Selesai!
             </div>
             <h1 className="hero-title">
               Central Laundry Express - Cucian Bersih, <span className="accent">Hidup Lebih Praktis!</span>
@@ -281,27 +278,19 @@ export default function Home() {
           </div>
 
           {visibleMedia.length > 0 ? (
-            <div className="gallery-grid">
-              {[0, 1, 2].map((colIndex) => {
-                const column = visibleMedia.filter((_, i) => i % 3 === colIndex);
-                if (column.length === 0) return null;
-                // Middle column runs as one tall item to keep the mosaic rhythm
-                const height = colIndex === 1 && column.length === 1 ? "484px" : "230px";
-                return (
-                  <div key={colIndex} className="gallery-column">
-                    {column.map((item) => (
-                      <div key={item.id} className="gallery-item" style={{ height }}>
-                        <GalleryMedia
-                          src={item.src}
-                          alt={item.alt}
-                          type={item.type}
-                          poster={item.poster}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
+            <div className="gallery-masonry">
+              {visibleMedia.map((item) => (
+                <div key={item.id} className="gallery-item gallery-item-natural">
+                  <GalleryMedia
+                    src={item.src}
+                    alt={item.alt}
+                    type={item.type}
+                    poster={item.poster}
+                    natural
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                </div>
+              ))}
             </div>
           ) : (
             <div
@@ -570,28 +559,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Local SEO Content */}
-      <section style={{ backgroundColor: "var(--bg-white)" }}>
-        <div className="container" style={{ paddingTop: "32px", paddingBottom: "12px" }}>
-          <div className="section-header" style={{ marginBottom: "18px" }}>
-            <h2 className="section-title">Laundry Purbalingga yang Cepat, Bersih, dan Praktis</h2>
-            <div className="section-line"></div>
-          </div>
-          <div style={{ maxWidth: "900px", margin: "0 auto", color: "var(--text-muted)", lineHeight: 1.8, fontSize: "16px" }}>
-            <p style={{ marginBottom: "14px" }}>
-              Central Laundry Express hadir sebagai pilihan jasa laundry Purbalingga untuk Anda yang ingin hasil bersih tanpa repot. Kami melayani laundry kiloan, cuci setrika, dan perawatan pakaian dengan proses yang higienis, rapi, dan cepat selesai.
-            </p>
-            <p style={{ marginBottom: "14px" }}>
-              Cocok untuk warga rumah tangga, anak kos, pekerja sibuk, hingga kebutuhan usaha yang membutuhkan layanan antar jemput laundry Purbalingga. Pakaian Anda ditangani dengan standar yang nyaman dipakai sehari-hari, harum, dan tetap terawat.
-            </p>
-            <p>
-              Jika Anda mencari laundry Purbalingga yang responsif, mudah dihubungi, dan siap membantu kebutuhan cuci harian maupun item khusus, silakan pesan lewat WhatsApp atau lihat halaman layanan kami untuk informasi paket lengkap.
-            </p>
-          </div>
-        </div>
-      </section>
-
 
       {/* Floating WhatsApp Widget */}
       <a

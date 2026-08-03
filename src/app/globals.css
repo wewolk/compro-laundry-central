@@ -712,6 +712,57 @@ img {
   min-height: 500px;
 }
 
+/* Beranda gallery: CSS columns so each photo keeps its own aspect ratio
+   instead of being cropped to a fixed-height box. Width is driven by the
+   column, height follows the image itself. */
+.gallery-masonry {
+  columns: 3;
+  column-gap: 24px;
+}
+
+.gallery-item-natural {
+  /* break-inside stops a photo being split across two columns */
+  break-inside: avoid;
+  margin-bottom: 24px;
+  /* Natural items size to content, so the flex:1 / absolute rules that the
+     fixed-height mosaic relies on must not apply here. */
+  flex: none;
+  height: auto;
+}
+
+.gallery-natural-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.5s ease;
+}
+
+.gallery-item-natural:hover .gallery-natural-img {
+  transform: scale(1.05);
+}
+
+/* Videos have no intrinsic box in natural mode, so give the click-to-play
+   trigger a sensible ratio rather than collapsing to zero height. */
+.gallery-item-natural .gallery-video-trigger,
+.gallery-item-natural .gallery-video {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 1024px) {
+  .gallery-masonry {
+    columns: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-masonry {
+    columns: 1;
+  }
+}
+
 .gallery-column {
   display: flex;
   flex-direction: column;

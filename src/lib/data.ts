@@ -16,11 +16,24 @@ export interface SiteContent {
     mapEmbedUrl: string;
     operationalHours: { weekdays: string; weekend: string };
   };
+  dashboard: DashboardData;
   paket: PaketItem[];
   kiloan: KiloanItem[];
   footer: FooterData;
   gallery: GalleryItem[];
   admin: AdminData;
+}
+
+export interface DashboardData {
+  brandName: string;
+  heroBadge: string;
+  heroTitle: string;
+  heroTitleAccent: string;
+  heroDesc: string;
+  ctaTitle: string;
+  ctaDesc: string;
+  ctaPhone: string;
+  navItems: { label: string; href: string }[];
 }
 
 export interface PaketItem {

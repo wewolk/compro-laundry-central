@@ -1,10 +1,30 @@
+"use client";
+
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import { useSiteContent } from "@/hooks/useContent";
 
 const WA_LINK =
   "https://wa.me/6285181840082?text=Halo%20Central%20Laundry%20Express,%20saya%20ingin%20bertanya.";
 
 export default function TentangKamiPage() {
+  const { content } = useSiteContent();
+  const facilities = content?.facilities ?? {
+    title: "Fasilitas & Teknologi",
+    desc: "Kami berinvestasi pada peralatan terbaik untuk memastikan pakaian Anda dirawat dengan standar tertinggi.",
+    cards: [
+      { id: 1, src: "/hero_laundry.png", alt: "Mesin Kapasitas Besar", name: "Mesin Kapasitas Besar", desc: "Mampu memproses hingga 20kg per mesin untuk efisiensi maksimal." },
+      { id: 2, src: "/hero_laundry.png", alt: "Deterjen Premium", name: "Deterjen Premium", desc: "Formula khusus ramah lingkungan yang aman untuk kulit sensitif." },
+      { id: 3, src: "/hero_laundry.png", alt: "Penyetrikaan Uap", name: "Penyetrikaan Uap", desc: "Menghilangkan kerutan tanpa merusak serat kain halus Anda." },
+    ],
+  };
+  const team = content?.team ?? {
+    title: "Tim Profesional Kami",
+    subtitle: "Orang-orang di balik kesegaran pakaian Anda.",
+    imageSrc: "/hero_laundry.png",
+    imageAlt: "Tim Profesional Central Laundry Express",
+  };
+
   return (
     <>
       <Navbar />
@@ -208,11 +228,8 @@ export default function TentangKamiPage() {
         <div className="container">
           <div className="facilities-header">
             <div>
-              <h2 className="facilities-title">Fasilitas & Teknologi</h2>
-              <p className="facilities-desc">
-                Kami berinvestasi pada peralatan terbaik untuk memastikan pakaian
-                Anda dirawat dengan standar tertinggi.
-              </p>
+              <h2 className="facilities-title">{facilities.title}</h2>
+              <p className="facilities-desc">{facilities.desc}</p>
             </div>
             <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="facilities-btn">
               Lihat Selengkapnya
@@ -220,80 +237,40 @@ export default function TentangKamiPage() {
           </div>
 
           <div className="facilities-grid">
-            <div className="facility-card">
-              <div className="facility-image-wrapper">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Mesin Kapasitas Besar"
-                  fill
-                  sizes="33vw"
-                  style={{ objectFit: "cover" }}
-                />
+            {facilities.cards.map((card) => (
+              <div key={card.id} className="facility-card">
+                <div className="facility-image-wrapper">
+                  <Image
+                    src={card.src}
+                    alt={card.alt}
+                    fill
+                    sizes="33vw"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+                <div className="facility-info">
+                  <h4 className="facility-name">{card.name}</h4>
+                  <p className="facility-desc">{card.desc}</p>
+                </div>
               </div>
-              <div className="facility-info">
-                <h4 className="facility-name">Mesin Kapasitas Besar</h4>
-                <p className="facility-desc">
-                  Mampu memproses hingga 20kg per mesin untuk efisiensi
-                  maksimal.
-                </p>
-              </div>
-            </div>
-
-            <div className="facility-card">
-              <div className="facility-image-wrapper">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Deterjen Premium"
-                  fill
-                  sizes="33vw"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <div className="facility-info">
-                <h4 className="facility-name">Deterjen Premium</h4>
-                <p className="facility-desc">
-                  Formula khusus ramah lingkungan yang aman untuk kulit
-                  sensitif.
-                </p>
-              </div>
-            </div>
-
-            <div className="facility-card">
-              <div className="facility-image-wrapper">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Penyetrikaan Uap"
-                  fill
-                  sizes="33vw"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <div className="facility-info">
-                <h4 className="facility-name">Penyetrikaan Uap</h4>
-                <p className="facility-desc">
-                  Menghilangkan kerutan tanpa merusak serat kain halus Anda.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Tim Profesional - Single photo from gallery, editable via admin */}
+      {/* Tim Profesional */}
       <section className="team-section">
         <div className="container">
           <div className="team-header">
-            <h2 className="team-title">Tim Profesional Kami</h2>
-            <p className="team-subtitle">
-              Orang-orang di balik kesegaran pakaian Anda.
-            </p>
+            <h2 className="team-title">{team.title}</h2>
+            <p className="team-subtitle">{team.subtitle}</p>
           </div>
 
           <div className="team-single-wrapper">
             <div className="team-photo-rect">
               <Image
-                src="/hero_laundry.png"
-                alt="Tim Profesional Central Laundry Express"
+                src={team.imageSrc}
+                alt={team.imageAlt}
                 fill
                 sizes="100vw"
                 style={{ objectFit: "cover" }}

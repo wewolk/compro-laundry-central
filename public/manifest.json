@@ -1,0 +1,21 @@
+{
+  "name": "Central Laundry Express",
+  "short_name": "CL Express",
+  "description": "Laundry profesional dengan standar higienis tinggi. Antar-jemput, express 2 jam selesai.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#085F80",
+  "theme_color": "#085F80",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

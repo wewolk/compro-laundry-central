@@ -45,10 +45,6 @@ export const metadata: Metadata = {
   verification: {
     google: "t6N-KEJM3FuVeMJ5YRjR_FqJon7tJx5p9xXkAbbOh-I",
   },
-  icons: {
-    icon: '/favicon.png',
-  },
-
 };
 
 export default function MarketingLayout({

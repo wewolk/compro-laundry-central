@@ -9,6 +9,11 @@ interface GalleryMediaProps {
   type: string;
   poster?: string;
   sizes?: string;
+  /**
+   * Render at the media's own aspect ratio instead of cropping to fill the
+   * parent box. Used by the beranda gallery so uploads aren't squashed.
+   */
+  natural?: boolean;
 }
 
 const VIDEO_EXTENSIONS = /\.(mp4|webm|mov|m4v)(\?.*)?$/i;
@@ -29,6 +34,7 @@ export default function GalleryMedia({
   type,
   poster,
   sizes = "(max-width: 768px) 100vw, 33vw",
+  natural = false,
 }: GalleryMediaProps) {
   const [playing, setPlaying] = useState(false);
   const [posterFailed, setPosterFailed] = useState(false);
@@ -39,6 +45,17 @@ export default function GalleryMedia({
   }, [playing]);
 
   if (!isPlayableVideo(src, type)) {
+    // Natural mode keeps the upload's real aspect ratio. The intrinsic size is
+    // unknown at render time (arbitrary admin uploads), so a plain img lets the
+    // browser derive height from the decoded file instead of us guessing.
+    if (natural) {
+      return (
+        /* eslint-disable-next-line @next/next/no-img-element --
+           Intrinsic dimensions are unknown; next/image needs width+height or fill,
+           both of which force an aspect ratio we're deliberately not imposing. */
+        <img src={src} alt={alt} className="gallery-natural-img" loading="lazy" />
+      );
+    }
     return (
       <Image src={src} alt={alt} fill sizes={sizes} style={{ objectFit: "cover" }} />
     );

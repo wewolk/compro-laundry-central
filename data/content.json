@@ -4,7 +4,7 @@
     "waNumber": "0851-8184-0082",
     "instagramUrl": "#",
     "email": "hello@centrallaundry.id",
-    "address": "Jl. Sudirman No. 45, Jakarta Pusat",
+    "address": "purbalingga",
     "mapLink": "https://www.google.com/maps/place/Centrallaundry/@-7.3867767,109.3669334,17z/data=!3m1!4b1!4m6!3m5!1s0x2e6559ea052a0e35:0xc56846bc52a9b7c4!8m2!3d-7.3867767!4d109.3669334!16s%2Fg%2F11nr86_gj1",
     "mapEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3956.2736181156826!2d109.2302196!3d-7.4243912!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMjUnMjcuOCJTIDEwOcKwMTMnNDguOCJF!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid",
     "operationalHours": {
@@ -169,9 +169,145 @@
       "type": "image"
     }
   ],
+  "dashboard": {
+    "brandName": "Central Laundry Express",
+    "heroBadge": "Express 2 Jam Selesai!",
+    "heroTitle": "Central Laundry Express - Cucian Bersih, ",
+    "heroTitleAccent": "Hidup Lebih Praktis!",
+    "heroDesc": "Nikmati layanan laundry profesional dengan standar higienis tinggi. Kami menjemput pakaian kotor Anda dan mengembalikannya dalam keadaan bersih, harum, dan rapi.",
+    "ctaTitle": "Siap Memberikan Kesegaran untuk Pakaian Anda?",
+    "ctaDesc": "Klik tombol di bawah untuk memesan via WhatsApp. Layanan profesional kami hanya sejarak jempol!",
+    "ctaPhone": "0851-8184-0082",
+    "navItems": [
+      {
+        "label": "Beranda",
+        "href": "/"
+      },
+      {
+        "label": "Layanan",
+        "href": "/layanan"
+      },
+      {
+        "label": "Tentang Kami",
+        "href": "/tentang"
+      },
+      {
+        "label": "Galeri",
+        "href": "/galeri"
+      },
+      {
+        "label": "Kontak",
+        "href": "/kontak"
+      }
+    ],
+    "heroSlides": [
+      "/hero_laundry.png"
+    ],
+    "features": [
+      {
+        "title": "Antar-Jemput",
+        "desc": "Hemat waktu dan tenaga. Kurir kami siap jemput dan antar laundry Anda sampai depan pintu."
+      },
+      {
+        "title": "Ekspres 1 Hari",
+        "desc": "Butuh cepat? Layanan kilat kami memastikan pakaian Anda siap dalam hitungan jam."
+      },
+      {
+        "title": "Higienis",
+        "desc": "Menggunakan deterjen ramah lingkungan dan proses pencucian anti-bakteri standar medis."
+      },
+      {
+        "title": "Harga Transparan",
+        "desc": "Tanpa biaya tersembunyi. Timbang di depan mata dengan nota digital yang akurat."
+      }
+    ]
+  },
   "admin": {
-    "password": "admin123",
+    "password": "pbkdf2$100000$qKl93vLnH3KTzHTEie1vgA==$oUWHpdrOdeVLCm6by83muQWWVP0UHUh34mcfX4EG2SU=",
     "resetCode": "826540",
     "resetExpiry": 1785675707293
+  },
+  "satuan": {
+    "bigCards": [
+      {
+        "id": 1,
+        "src": "/hero_laundry.png",
+        "alt": "Jas, Kemeja & Gaun",
+        "badge": "Pakaian Premium",
+        "name": "Jas, Kemeja & Gaun"
+      },
+      {
+        "id": 2,
+        "src": "/hero_laundry.png",
+        "alt": "Perlengkapan Tidur",
+        "name": "Perlengkapan Tidur"
+      },
+      {
+        "id": 3,
+        "src": "/hero_laundry.png",
+        "alt": "Home Decor",
+        "name": "Home Decor",
+        "subtext": "Gorden, Karpet & Taplak"
+      }
+    ],
+    "smallCards": [
+      {
+        "id": 1,
+        "icon": "👞",
+        "title": "Sepatu & Tas",
+        "desc": "Deep cleaning untuk menjaga material kulit, suede, dan kanvas tetap awet."
+      },
+      {
+        "id": 2,
+        "icon": "🍼",
+        "title": "Baby Gears",
+        "desc": "Pembersihan stroller dan carseat dengan deterjen khusus yang aman untuk bayi."
+      }
+    ]
+  },
+  "dryClean": {
+    "badge": "PREMIUM SERVICE",
+    "title": "Dry Clean Professional",
+    "desc": "Untuk bahan sensitif seperti wol, sutra, cashmere, dan busana berpoyet tinggi. Kami menggunakan proses pembersihan tanpa air untuk menjaga integritas serat kain Anda.",
+    "features": [
+      "Quality Control 3 lapis",
+      "Solvent ramah lingkungan",
+      "Packaging eksklusif"
+    ],
+    "imageSrc": "/hero_laundry.png",
+    "imageAlt": "Dry Clean Professional"
+  },
+  "facilities": {
+    "title": "Fasilitas & Teknologi",
+    "desc": "Kami berinvestasi pada peralatan terbaik untuk memastikan pakaian Anda dirawat dengan standar tertinggi.",
+    "cards": [
+      {
+        "id": 1,
+        "src": "/hero_laundry.png",
+        "alt": "Mesin Kapasitas Besar",
+        "name": "Mesin Kapasitas Besar",
+        "desc": "Mampu memproses hingga 20kg per mesin untuk efisiensi maksimal."
+      },
+      {
+        "id": 2,
+        "src": "/hero_laundry.png",
+        "alt": "Deterjen Premium",
+        "name": "Deterjen Premium",
+        "desc": "Formula khusus ramah lingkungan yang aman untuk kulit sensitif."
+      },
+      {
+        "id": 3,
+        "src": "/hero_laundry.png",
+        "alt": "Penyetrikaan Uap",
+        "name": "Penyetrikaan Uap",
+        "desc": "Menghilangkan kerutan tanpa merusak serat kain halus Anda."
+      }
+    ]
+  },
+  "team": {
+    "title": "Tim Profesional Kami",
+    "subtitle": "Orang-orang di balik kesegaran pakaian Anda.",
+    "imageSrc": "/hero_laundry.png",
+    "imageAlt": "Tim Profesional Central Laundry Express"
   }
 }

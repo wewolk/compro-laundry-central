@@ -3,24 +3,27 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const navItems = [
-  { label: "Beranda", href: "/" },
-  { label: "Layanan", href: "/layanan" },
-  { label: "Tentang Kami", href: "/tentang" },
-  { label: "Galeri", href: "/galeri" },
-  { label: "Kontak", href: "/kontak" },
-];
+import { useSiteContent } from "@/hooks/useContent";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { content } = useSiteContent();
+
+  const brandName = content?.dashboard?.brandName ?? "Central Laundry Express";
+  const navItems = content?.dashboard?.navItems ?? [
+    { label: "Beranda", href: "/" },
+    { label: "Layanan", href: "/layanan" },
+    { label: "Tentang Kami", href: "/tentang" },
+    { label: "Galeri", href: "/galeri" },
+    { label: "Kontak", href: "/kontak" },
+  ];
 
   return (
     <header className="header">
       <div className="container nav-container">
         <Link href="/" className="logo">
-          Central Laundry Express
+          {brandName}
         </Link>
 
         {/* Desktop Navigation */}
@@ -72,7 +75,7 @@ export default function Navbar() {
               marginBottom: "40px",
             }}
           >
-            <span className="logo">Central Laundry</span>
+            <span className="logo">{brandName}</span>
             <button
               onClick={() => setMobileMenuOpen(false)}
               style={{

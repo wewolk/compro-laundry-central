@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useContent, PageHeader, SaveButton, Card, InputField } from "../_components";
 import { MAX_VIDEO_BYTES, formatBytes } from "@/lib/media";
 
+const MAX_IMAGES = 10;
+const MAX_VIDEOS = 5;
+
 export default function GaleriAdminPage() {
   const { content, loading, saving, dirty, message, updateContent, saveContent, uploadFile } = useContent();
   const [uploadingId, setUploadingId] = useState<number | null>(null);
@@ -12,6 +15,8 @@ export default function GaleriAdminPage() {
   if (loading || !content) return <p style={{ padding: "40px", color: "#64748b" }}>Memuat data...</p>;
 
   const gallery = content.gallery;
+  const imageCount = gallery.filter((g) => g.type === "image").length;
+  const videoCount = gallery.filter((g) => g.type === "video").length;
 
   const handleMediaUpload = async (id: number, file: File) => {
     setUploadingId(id);
@@ -45,10 +50,16 @@ export default function GaleriAdminPage() {
   };
 
   const addGalleryItem = () => {
+    if (imageCount >= MAX_IMAGES && videoCount >= MAX_VIDEOS) {
+      alert(`Maksimal ${MAX_IMAGES} foto dan ${MAX_VIDEOS} video. Hapus beberapa media terlebih dahulu.`);
+      return;
+    }
     const maxId = gallery.reduce((max, g) => Math.max(max, g.id), 0);
+    // Default to image if image quota not full, else video
+    const newType = imageCount < MAX_IMAGES ? "image" : "video";
     updateContent({
       ...content,
-      gallery: [...gallery, { id: maxId + 1, src: "/hero_laundry.png", alt: "Foto Baru", category: "proses-pencucian", type: "image" }],
+      gallery: [...gallery, { id: maxId + 1, src: "/hero_laundry.png", alt: "Media Baru", category: "proses-pencucian", type: newType }],
     });
   };
 
@@ -65,20 +76,29 @@ export default function GaleriAdminPage() {
     { value: "tim-kami", label: "Tim Kami" },
   ];
 
+  const canAddImage = imageCount < MAX_IMAGES;
+  const canAddVideo = videoCount < MAX_VIDEOS;
+
   return (
     <>
       <PageHeader
         title="🖼️ Kelola Galeri"
-        subtitle="Upload foto atau video. Foto otomatis dikompres sebelum dikirim. Perubahan baru tersimpan setelah klik Simpan."
+        subtitle={`Upload foto atau video. Maksimal ${MAX_IMAGES} foto & ${MAX_VIDEOS} video. Foto: ${imageCount}/${MAX_IMAGES} | Video: ${videoCount}/${MAX_VIDEOS}`}
       />
       <SaveButton onClick={() => saveContent()} saving={saving} message={message} dirty={dirty} />
 
-      <button
-        onClick={addGalleryItem}
-        style={{ marginTop: "16px", padding: "12px 24px", background: "#16a34a", color: "white", border: "none", borderRadius: "10px", fontWeight: 600, cursor: "pointer", marginBottom: "24px" }}
-      >
-        ➕ Tambah Media Baru
-      </button>
+      {(!canAddImage && !canAddVideo) ? (
+        <div style={{ marginTop: "16px", marginBottom: "24px", padding: "16px 24px", background: "#fef3c7", borderRadius: "10px", color: "#92400e", fontWeight: 600, fontSize: "14px" }}>
+          ⚠️ Kuota penuh! Maksimal {MAX_IMAGES} foto & {MAX_VIDEOS} video. Hapus beberapa media untuk menambah yang baru.
+        </div>
+      ) : (
+        <button
+          onClick={addGalleryItem}
+          style={{ marginTop: "16px", padding: "12px 24px", background: "#16a34a", color: "white", border: "none", borderRadius: "10px", fontWeight: 600, cursor: "pointer", marginBottom: "24px" }}
+        >
+          ➕ Tambah Media Baru
+        </button>
+      )}
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "20px" }}>
         {gallery.map((item) => (
@@ -93,9 +113,7 @@ export default function GaleriAdminPage() {
                   style={{ width: "100%", height: "180px", objectFit: "cover", display: "block", background: "#0f172a" }}
                 />
               ) : (
-                /* eslint-disable-next-line @next/next/no-img-element --
-                   Admin preview of user uploads: arbitrary runtime paths that
-                   next/image would need explicit remotePatterns for. */
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={item.src}
                   alt={item.alt}

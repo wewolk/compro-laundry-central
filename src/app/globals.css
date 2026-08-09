@@ -712,6 +712,57 @@ img {
   min-height: 500px;
 }
 
+/* Beranda gallery: CSS columns so each photo keeps its own aspect ratio
+   instead of being cropped to a fixed-height box. Width is driven by the
+   column, height follows the image itself. */
+.gallery-masonry {
+  columns: 3;
+  column-gap: 24px;
+}
+
+.gallery-item-natural {
+  /* break-inside stops a photo being split across two columns */
+  break-inside: avoid;
+  margin-bottom: 24px;
+  /* Natural items size to content, so the flex:1 / absolute rules that the
+     fixed-height mosaic relies on must not apply here. */
+  flex: none;
+  height: auto;
+}
+
+.gallery-natural-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.5s ease;
+}
+
+.gallery-item-natural:hover .gallery-natural-img {
+  transform: scale(1.05);
+}
+
+/* Videos have no intrinsic box in natural mode, so give the click-to-play
+   trigger a sensible ratio rather than collapsing to zero height. */
+.gallery-item-natural .gallery-video-trigger,
+.gallery-item-natural .gallery-video {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 1024px) {
+  .gallery-masonry {
+    columns: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-masonry {
+    columns: 1;
+  }
+}
+
 .gallery-column {
   display: flex;
   flex-direction: column;
@@ -1192,8 +1243,10 @@ a.static-map.map-placeholder {
 .cta-title {
   font-size: 36px;
   font-weight: 800;
-  margin-bottom: 16px;
+  margin: 0 auto 16px;
+  max-width: 760px;
   letter-spacing: -0.5px;
+  text-wrap: balance;
 }
 
 .cta-desc {
@@ -1202,18 +1255,19 @@ a.static-map.map-placeholder {
   max-width: 650px;
   margin: 0 auto 36px;
   line-height: 1.7;
+  text-wrap: pretty;
 }
 
 .cta-actions {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 28px;
-  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .cta-btn {
-  background-color: var(--accent);
+  background-color: #25D366;
   color: var(--bg-white);
   padding: 14px 32px;
   border-radius: 30px;
@@ -1227,7 +1281,7 @@ a.static-map.map-placeholder {
 }
 
 .cta-btn:hover {
-  background-color: var(--accent-hover);
+  background-color: #1da851;
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
@@ -1255,21 +1309,21 @@ a.static-map.map-placeholder {
   right: 32px;
   width: 60px;
   height: 60px;
-  background-color: var(--accent);
+  background-color: #25D366;
   color: var(--bg-white);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(158, 63, 5, 0.4);
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
   z-index: 999;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .whatsapp-float:hover {
   transform: scale(1.1) translateY(-4px);
-  background-color: var(--accent-hover);
-  box-shadow: 0 6px 24px rgba(158, 63, 5, 0.5);
+  background-color: #1da851;
+  box-shadow: 0 6px 24px rgba(37, 211, 102, 0.5);
 }
 
 /* Responsive Styles */
@@ -2746,9 +2800,29 @@ a.static-map.map-placeholder {
 }
 
 .team-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.team-single-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.team-photo-rect {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .team-photo-rect {
+    aspect-ratio: 4/3;
+  }
 }
 
 .team-card {

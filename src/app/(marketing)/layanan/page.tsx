@@ -5,13 +5,21 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { useSiteContent } from "@/hooks/useContent";
 
-
 const WA_LINK =
   "https://wa.me/6285181840082?text=Halo%20Central%20Laundry%20Express,%20saya%20ingin%20memesan%20layanan%20laundry.";
 
 export default function LayananPage() {
   const { content } = useSiteContent();
   const kiloan = content?.kiloan ?? [];
+  const satuan = content?.satuan ?? { bigCards: [], smallCards: [] };
+  const dryClean = content?.dryClean ?? {
+    badge: "PREMIUM SERVICE",
+    title: "Dry Clean Professional",
+    desc: "Untuk bahan sensitif seperti wol, sutra, cashmere, dan busana berpoyet tinggi.",
+    features: ["Quality Control 3 lapis", "Solvent ramah lingkungan", "Packaging eksklusif"],
+    imageSrc: "/hero_laundry.png",
+    imageAlt: "Dry Clean Professional",
+  };
 
   const renderIcon = (iconType: string) => {
     switch (iconType) {
@@ -37,6 +45,7 @@ export default function LayananPage() {
         );
     }
   };
+
   return (
     <>
       <Navbar />
@@ -112,68 +121,33 @@ export default function LayananPage() {
 
           {/* Big Image Cards */}
           <div className="satuan-big-grid">
-            {/* Card 1 — Jas, Kemeja, Gaun */}
-            <div className="satuan-image-card" style={{ gridColumn: "1" }}>
-              <Image src="/hero_laundry.png" alt="Jas, Kemeja & Gaun" fill sizes="33vw" style={{ objectFit: "cover" }} />
-              <div className="satuan-image-overlay"></div>
-              <div className="satuan-image-info">
-                <span className="satuan-image-badge">Pakaian Premium</span>
-                <p className="satuan-image-name">Jas, Kemeja & Gaun</p>
-                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="satuan-image-btn">
-                  Lihat Detail →
-                </a>
+            {satuan.bigCards.map((card, i) => (
+              <div key={card.id} className="satuan-image-card" style={i === 0 ? { gridColumn: "1" } : undefined}>
+                <Image src={card.src} alt={card.alt} fill sizes="33vw" style={{ objectFit: "cover" }} />
+                <div className="satuan-image-overlay"></div>
+                <div className="satuan-image-info">
+                  {card.badge && <span className="satuan-image-badge">{card.badge}</span>}
+                  <p className="satuan-image-name">{card.name}</p>
+                  {card.subtext && <p className="satuan-image-price" style={{ marginBottom: 4 }}>{card.subtext}</p>}
+                  <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="satuan-image-btn">
+                    {i === 0 ? "Lihat Detail →" : "Pesan →"}
+                  </a>
+                </div>
               </div>
-            </div>
-
-            {/* Card 2 — Perlengkapan Tidur */}
-            <div className="satuan-image-card">
-              <Image src="/hero_laundry.png" alt="Perlengkapan Tidur" fill sizes="33vw" style={{ objectFit: "cover" }} />
-              <div className="satuan-image-overlay"></div>
-              <div className="satuan-image-info">
-                <p className="satuan-image-name">Perlengkapan Tidur</p>
-                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="satuan-image-btn">
-                  Pesan →
-                </a>
-              </div>
-            </div>
-
-            {/* Card 3 — Home Decor */}
-            <div className="satuan-image-card">
-              <Image src="/hero_laundry.png" alt="Home Decor" fill sizes="33vw" style={{ objectFit: "cover" }} />
-              <div className="satuan-image-overlay"></div>
-              <div className="satuan-image-info">
-                <p className="satuan-image-name">Home Decor</p>
-                <p className="satuan-image-price" style={{ marginBottom: 4 }}>Gorden, Karpet & Taplak</p>
-                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="satuan-image-btn">
-                  Pesan →
-                </a>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Small Info Cards */}
           <div className="satuan-small-grid">
-            {/* Sepatu & Tas */}
-            <div className="satuan-info-card">
-              <div className="satuan-info-icon">🥿</div>
-              <div>
-                <h4 className="satuan-info-title">Sepatu & Tas</h4>
-                <p className="satuan-info-desc">
-                  Deep cleaning untuk menjaga material kulit, suede, dan kanvas tetap awet.
-                </p>
+            {satuan.smallCards.map((card) => (
+              <div key={card.id} className="satuan-info-card">
+                <div className="satuan-info-icon">{card.icon}</div>
+                <div>
+                  <h4 className="satuan-info-title">{card.title}</h4>
+                  <p className="satuan-info-desc">{card.desc}</p>
+                </div>
               </div>
-            </div>
-
-            {/* Baby Gears */}
-            <div className="satuan-info-card">
-              <div className="satuan-info-icon">🍼</div>
-              <div>
-                <h4 className="satuan-info-title">Baby Gears</h4>
-                <p className="satuan-info-desc">
-                  Pembersihan stroller dan carseat dengan deterjen khusus yang aman untuk bayi.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -184,24 +158,16 @@ export default function LayananPage() {
           <div className="dryclean-card">
             <div className="dryclean-content">
               <div>
-                <span className="dryclean-badge">
-                  ✦ PREMIUM SERVICE
-                </span>
-                <h2 className="dryclean-title">Dry Clean Professional</h2>
-                <p className="dryclean-desc">
-                  Untuk bahan sensitif seperti wol, sutra, cashmere, dan busana berpoyet tinggi. Kami menggunakan proses pembersihan tanpa air untuk menjaga integritas serat kain Anda.
-                </p>
+                <span className="dryclean-badge">✦ {dryClean.badge}</span>
+                <h2 className="dryclean-title">{dryClean.title}</h2>
+                <p className="dryclean-desc">{dryClean.desc}</p>
               </div>
               <ul className="dryclean-features">
-                <li className="dryclean-feature">
-                  <span className="dryclean-star">★</span>Quality Control 3 lapis
-                </li>
-                <li className="dryclean-feature">
-                  <span className="dryclean-star">★</span>Solvent ramah lingkungan
-                </li>
-                <li className="dryclean-feature">
-                  <span className="dryclean-star">★</span>Packaging eksklusif
-                </li>
+                {dryClean.features.map((f, i) => (
+                  <li key={i} className="dryclean-feature">
+                    <span className="dryclean-star">★</span>{f}
+                  </li>
+                ))}
               </ul>
               <div className="dryclean-actions">
                 <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="dryclean-btn-primary">
@@ -215,8 +181,8 @@ export default function LayananPage() {
 
             <div className="dryclean-image-wrapper">
               <Image
-                src="/hero_laundry.png"
-                alt="Dry Clean Professional"
+                src={dryClean.imageSrc}
+                alt={dryClean.imageAlt}
                 fill
                 sizes="50vw"
                 style={{ objectFit: "cover" }}
@@ -237,7 +203,6 @@ export default function LayananPage() {
           </div>
 
           <div className="pickup-cards">
-            {/* Card 1 */}
             <div className="pickup-card">
               <div className="pickup-card-icon">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -246,12 +211,9 @@ export default function LayananPage() {
                 </svg>
               </div>
               <h3 className="pickup-card-title">Area Jangkauan</h3>
-              <p className="pickup-card-desc">
-                Melayani area pusat kota dan sekitarnya (Radius 10km).
-              </p>
+              <p className="pickup-card-desc">Melayani area pusat kota dan sekitarnya (Radius 10km).</p>
             </div>
 
-            {/* Card 2 */}
             <div className="pickup-card">
               <div className="pickup-card-icon">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -262,12 +224,9 @@ export default function LayananPage() {
                 </svg>
               </div>
               <h3 className="pickup-card-title">Free Ongkir</h3>
-              <p className="pickup-card-desc">
-                Gratis biaya antar jemput untuk laundry di atas 5kg atau transaksi minimal Rp 100rb.
-              </p>
+              <p className="pickup-card-desc">Gratis biaya antar jemput untuk laundry di atas 5kg atau transaksi minimal Rp 100rb.</p>
             </div>
 
-            {/* Card 3 */}
             <div className="pickup-card">
               <div className="pickup-card-icon">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -276,9 +235,7 @@ export default function LayananPage() {
                 </svg>
               </div>
               <h3 className="pickup-card-title">Jadwal Fleksibel</h3>
-              <p className="pickup-card-desc">
-                Pilih jam jemput pagi, siang, atau sore sesuai kenyamanan Anda.
-              </p>
+              <p className="pickup-card-desc">Pilih jam jemput pagi, siang, atau sore sesuai kenyamanan Anda.</p>
             </div>
           </div>
 
@@ -305,7 +262,6 @@ export default function LayananPage() {
           </div>
         </div>
       </section>
-
 
       {/* Floating WA Button */}
       <a

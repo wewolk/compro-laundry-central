@@ -20,7 +20,10 @@ export default function Home() {
   const { content } = useSiteContent();
   const paket = content?.paket ?? [];
   const settings = content?.settings;
+  const dashboard = content?.dashboard;
   const waNumber = settings?.waNumber ?? "0851-8184-0082";
+  const waLink = settings?.waLink ?? "https://wa.me/6285181840082";
+  const ctaPhone = dashboard?.ctaPhone ?? "0851-8184-0082";
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LaundryService",
@@ -49,14 +52,39 @@ export default function Home() {
 
   const heroImages = Array.from(
     new Set(
-      (content?.gallery ?? [])
-        .filter((item) => item.type === "image" && item.src)
-        .map((item) => item.src)
+      (dashboard?.heroSlides ?? [])
+        .filter(Boolean)
     )
   ).slice(0, MAX_HERO_SLIDES);
   const slides = heroImages.length > 0 ? heroImages : [FALLBACK_HERO];
 
-  // Beranda shows a 4-item teaser of the gallery, split by the active tab
+  const features = dashboard?.features ?? [
+    { title: "Antar-Jemput", desc: "Hemat waktu dan tenaga. Kurir kami siap jemput dan antar laundry Anda sampai depan pintu." },
+    { title: "Ekspres 1 Hari", desc: "Butuh cepat? Layanan kilat kami memastikan pakaian Anda siap dalam hitungan jam." },
+    { title: "Higienis", desc: "Menggunakan deterjen ramah lingkungan dan proses pencucian anti-bakteri standar medis." },
+    { title: "Harga Transparan", desc: "Tanpa biaya tersembunyi. Timbang di depan mata dengan nota digital yang akurat." },
+  ];
+
+  const featureIcons = [
+    <svg key="truck" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="3" width="15" height="13" rx="2" ry="2" />
+      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+      <circle cx="5.5" cy="18.5" r="2.5" />
+      <circle cx="18.5" cy="18.5" r="2.5" />
+    </svg>,
+    <svg key="bolt" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </svg>,
+    <svg key="shield" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>,
+    <svg key="scale" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>,
+  ];
+
+  // Gallery section
   const wantedType = activeTab === "video" ? "video" : "image";
   const visibleMedia = (content?.gallery ?? [])
     .map((item) => ({
@@ -78,20 +106,17 @@ export default function Home() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="hero-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-8h-2v6h2V8z"/>
-              </svg>
-              Express 1 Hari Sampai!
+              {dashboard?.heroBadge ?? "Express 2 Jam Selesai!"}
             </div>
             <h1 className="hero-title">
-              Central Laundry Express - Cucian Bersih, <span className="accent">Hidup Lebih Praktis!</span>
+              {dashboard?.heroTitle ?? "Central Laundry Express - Cucian Bersih, "}<span className="accent">{dashboard?.heroTitleAccent ?? "Hidup Lebih Praktis!"}</span>
             </h1>
             <p className="hero-desc">
-              Nikmati layanan laundry profesional dengan standar higienis tinggi. Kami menjemput pakaian kotor Anda dan mengembalikannya dalam keadaan bersih, harum, dan rapi.
+              {dashboard?.heroDesc ?? "Nikmati layanan laundry profesional dengan standar higienis tinggi. Kami menjemput pakaian kotor Anda dan mengembalikannya dalam keadaan bersih, harum, dan rapi."}
             </p>
             <div className="hero-actions">
               <a
-                href="https://wa.me/6285181840082?text=Halo%20Central%20Laundry%20Express,%20saya%20ingin%20memesan%20layanan%20laundry."
+                href={waLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-primary"
@@ -131,65 +156,15 @@ export default function Home() {
           </div>
           
           <div className="features-grid">
-            {/* Feature 1 */}
-            <div className="feature-card">
-              <div className="feature-icon-wrapper feature-icon-1">
-                {/* Truck Icon */}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="1" y="3" width="15" height="13" rx="2" ry="2" />
-                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-                  <circle cx="5.5" cy="18.5" r="2.5" />
-                  <circle cx="18.5" cy="18.5" r="2.5" />
-                </svg>
+            {features.map((feat, i) => (
+              <div key={i} className="feature-card">
+                <div className={`feature-icon-wrapper feature-icon-${(i % 4) + 1}`}>
+                  {featureIcons[i % featureIcons.length]}
+                </div>
+                <h3 className="feature-title">{feat.title}</h3>
+                <p className="feature-desc">{feat.desc}</p>
               </div>
-              <h3 className="feature-title">Antar-Jemput</h3>
-              <p className="feature-desc">
-                Hemat waktu dan tenaga. Kurir kami siap jemput dan antar laundry Anda sampai depan pintu.
-              </p>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="feature-card">
-              <div className="feature-icon-wrapper feature-icon-2">
-                {/* Lightning Bolt */}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                </svg>
-              </div>
-              <h3 className="feature-title">Ekspres 1 Hari</h3>
-              <p className="feature-desc">
-                Butuh cepat? Layanan kilat kami memastikan pakaian Anda siap dalam hitungan jam.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="feature-card">
-              <div className="feature-icon-wrapper feature-icon-3">
-                {/* Shield / Sanitizer */}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              </div>
-              <h3 className="feature-title">Higienis</h3>
-              <p className="feature-desc">
-                Menggunakan deterjen ramah lingkungan dan proses pencucian anti-bakteri standar medis.
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="feature-card">
-              <div className="feature-icon-wrapper feature-icon-4">
-                {/* Scale / Cash / Receipt */}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="12" y1="1" x2="12" y2="23"/>
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                </svg>
-              </div>
-              <h3 className="feature-title">Harga Transparan</h3>
-              <p className="feature-desc">
-                Tanpa biaya tersembunyi. Timbang di depan mata dengan nota digital yang akurat.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -281,27 +256,19 @@ export default function Home() {
           </div>
 
           {visibleMedia.length > 0 ? (
-            <div className="gallery-grid">
-              {[0, 1, 2].map((colIndex) => {
-                const column = visibleMedia.filter((_, i) => i % 3 === colIndex);
-                if (column.length === 0) return null;
-                // Middle column runs as one tall item to keep the mosaic rhythm
-                const height = colIndex === 1 && column.length === 1 ? "484px" : "230px";
-                return (
-                  <div key={colIndex} className="gallery-column">
-                    {column.map((item) => (
-                      <div key={item.id} className="gallery-item" style={{ height }}>
-                        <GalleryMedia
-                          src={item.src}
-                          alt={item.alt}
-                          type={item.type}
-                          poster={item.poster}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
+            <div className="gallery-masonry">
+              {visibleMedia.map((item) => (
+                <div key={item.id} className="gallery-item gallery-item-natural">
+                  <GalleryMedia
+                    src={item.src}
+                    alt={item.alt}
+                    type={item.type}
+                    poster={item.poster}
+                    natural
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                </div>
+              ))}
             </div>
           ) : (
             <div
@@ -483,7 +450,7 @@ export default function Home() {
                   </div>
                   <div className="contact-details">
                     <span className="contact-label">Alamat Outlet</span>
-                    <span className="contact-value">Jl. Utama No. 123, Central Business District, Jakarta Selatan</span>
+                    <span className="contact-value">{settings?.address ?? "Jl. Utama No. 123, Purbalingga"}</span>
                   </div>
                 </div>
 
@@ -496,7 +463,8 @@ export default function Home() {
                   </div>
                   <div className="contact-details">
                     <span className="contact-label">Jam Operasional</span>
-                    <span className="contact-value">Setiap Hari: 07:00 - 21:00 WIB</span>
+                    <span className="contact-value">{settings?.operationalHours?.weekdays ?? "Senin - Sabtu: 07:00 - 20:00"}</span>
+                    <span className="contact-value">{settings?.operationalHours?.weekend ?? "Minggu: 09:00 - 17:00"}</span>
                   </div>
                 </div>
 
@@ -508,7 +476,7 @@ export default function Home() {
                   </div>
                   <div className="contact-details">
                     <span className="contact-label">Telepon / WhatsApp</span>
-                    <span className="contact-value">0851-8184-0082</span>
+                    <span className="contact-value">{settings?.waNumber ?? "0851-8184-0082"}</span>
                   </div>
                 </div>
               </div>
@@ -545,9 +513,9 @@ export default function Home() {
       {/* CTA Banner Section */}
       <section className="cta-banner">
         <div className="container">
-          <h2 className="cta-title">Siap Memberikan Kesegaran untuk Pakaian Anda?</h2>
+          <h2 className="cta-title">{dashboard?.ctaTitle ?? "Siap Memberikan Kesegaran untuk Pakaian Anda?"}</h2>
           <p className="cta-desc">
-            Klik tombol di bawah untuk memesan via WhatsApp. Layanan profesional kami hanya sejarak jempol!
+            {dashboard?.ctaDesc ?? "Klik tombol di bawah untuk memesan via WhatsApp. Layanan profesional kami hanya sejarak jempol!"}
           </p>
           <div className="cta-actions">
             <a
@@ -561,35 +529,15 @@ export default function Home() {
               </svg>
               Pesan via WhatsApp
             </a>
-            <span style={{ fontSize: "16px", color: "white", opacity: 0.8 }}>Atau Hubungi:</span>
-            <a href="tel:+6285181840082" className="cta-phone-link">
-              0851-8184-0082
-            </a>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
+              <span style={{ fontSize: "16px", color: "white", opacity: 0.8 }}>Atau Hubungi:</span>
+              <a href={`tel:${ctaPhone}`} className="cta-phone-link">
+                {ctaPhone}
+              </a>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* Local SEO Content */}
-      <section style={{ backgroundColor: "var(--bg-white)" }}>
-        <div className="container" style={{ padding: "32px 0 12px" }}>
-          <div className="section-header" style={{ marginBottom: "18px" }}>
-            <h2 className="section-title">Laundry Purbalingga yang Cepat, Bersih, dan Praktis</h2>
-            <div className="section-line"></div>
-          </div>
-          <div style={{ maxWidth: "900px", color: "var(--text-muted)", lineHeight: 1.8, fontSize: "16px" }}>
-            <p style={{ marginBottom: "14px" }}>
-              Central Laundry Express hadir sebagai pilihan jasa laundry Purbalingga untuk Anda yang ingin hasil bersih tanpa repot. Kami melayani laundry kiloan, cuci setrika, dan perawatan pakaian dengan proses yang higienis, rapi, dan cepat selesai.
-            </p>
-            <p style={{ marginBottom: "14px" }}>
-              Cocok untuk warga rumah tangga, anak kos, pekerja sibuk, hingga kebutuhan usaha yang membutuhkan layanan antar jemput laundry Purbalingga. Pakaian Anda ditangani dengan standar yang nyaman dipakai sehari-hari, harum, dan tetap terawat.
-            </p>
-            <p>
-              Jika Anda mencari laundry Purbalingga yang responsif, mudah dihubungi, dan siap membantu kebutuhan cuci harian maupun item khusus, silakan pesan lewat WhatsApp atau lihat halaman layanan kami untuk informasi paket lengkap.
-            </p>
-          </div>
-        </div>
-      </section>
-
 
       {/* Floating WhatsApp Widget */}
       <a

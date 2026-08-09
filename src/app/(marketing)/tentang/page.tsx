@@ -1,11 +1,30 @@
+"use client";
+
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
-
+import { useSiteContent } from "@/hooks/useContent";
 
 const WA_LINK =
   "https://wa.me/6285181840082?text=Halo%20Central%20Laundry%20Express,%20saya%20ingin%20bertanya.";
 
 export default function TentangKamiPage() {
+  const { content } = useSiteContent();
+  const facilities = content?.facilities ?? {
+    title: "Fasilitas & Teknologi",
+    desc: "Kami berinvestasi pada peralatan terbaik untuk memastikan pakaian Anda dirawat dengan standar tertinggi.",
+    cards: [
+      { id: 1, src: "/hero_laundry.png", alt: "Mesin Kapasitas Besar", name: "Mesin Kapasitas Besar", desc: "Mampu memproses hingga 20kg per mesin untuk efisiensi maksimal." },
+      { id: 2, src: "/hero_laundry.png", alt: "Deterjen Premium", name: "Deterjen Premium", desc: "Formula khusus ramah lingkungan yang aman untuk kulit sensitif." },
+      { id: 3, src: "/hero_laundry.png", alt: "Penyetrikaan Uap", name: "Penyetrikaan Uap", desc: "Menghilangkan kerutan tanpa merusak serat kain halus Anda." },
+    ],
+  };
+  const team = content?.team ?? {
+    title: "Tim Profesional Kami",
+    subtitle: "Orang-orang di balik kesegaran pakaian Anda.",
+    imageSrc: "/hero_laundry.png",
+    imageAlt: "Tim Profesional Central Laundry Express",
+  };
+
   return (
     <>
       <Navbar />
@@ -204,66 +223,13 @@ export default function TentangKamiPage() {
         </div>
       </section>
 
-      {/* Perjalanan Kami - Timeline */}
-      <section className="timeline-section">
-        <div className="container">
-          <div className="timeline-header">
-            <h2 className="timeline-title">Perjalanan Kami</h2>
-          </div>
-
-          <div className="timeline-container">
-            {/* 2014 - Left */}
-            <div className="timeline-item left">
-              <div className="timeline-dot"></div>
-              <div className="timeline-card">
-                <div className="timeline-year">2014</div>
-                <div className="timeline-milestone">Awal Mula</div>
-                <p className="timeline-desc">
-                  Membuka outlet pertama di pusat kota dengan konsep laundry
-                  mandiri higienis.
-                </p>
-              </div>
-            </div>
-
-            {/* 2018 - Right */}
-            <div className="timeline-item right">
-              <div className="timeline-dot"></div>
-              <div className="timeline-card">
-                <div className="timeline-year">2018</div>
-                <div className="timeline-milestone">Digitalisasi</div>
-                <p className="timeline-desc">
-                  Meluncurkan sistem tracking laundry berbasis QR Code untuk
-                  pelanggan setia.
-                </p>
-              </div>
-            </div>
-
-            {/* 2024 - Left */}
-            <div className="timeline-item left">
-              <div className="timeline-dot"></div>
-              <div className="timeline-card">
-                <div className="timeline-year">2024</div>
-                <div className="timeline-milestone">Express Hub</div>
-                <p className="timeline-desc">
-                  Pembukaan pusat pemrosesan berkapasitas besar dengan mesin
-                  industri ramah lingkungan.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Fasilitas & Teknologi */}
       <section className="facilities-section">
         <div className="container">
           <div className="facilities-header">
             <div>
-              <h2 className="facilities-title">Fasilitas & Teknologi</h2>
-              <p className="facilities-desc">
-                Kami berinvestasi pada peralatan terbaik untuk memastikan pakaian
-                Anda dirawat dengan standar tertinggi.
-              </p>
+              <h2 className="facilities-title">{facilities.title}</h2>
+              <p className="facilities-desc">{facilities.desc}</p>
             </div>
             <a href={WA_LINK} target="_blank" rel="noopener noreferrer" className="facilities-btn">
               Lihat Selengkapnya
@@ -271,61 +237,23 @@ export default function TentangKamiPage() {
           </div>
 
           <div className="facilities-grid">
-            <div className="facility-card">
-              <div className="facility-image-wrapper">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Mesin Kapasitas Besar"
-                  fill
-                  sizes="33vw"
-                  style={{ objectFit: "cover" }}
-                />
+            {facilities.cards.map((card) => (
+              <div key={card.id} className="facility-card">
+                <div className="facility-image-wrapper">
+                  <Image
+                    src={card.src}
+                    alt={card.alt}
+                    fill
+                    sizes="33vw"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+                <div className="facility-info">
+                  <h4 className="facility-name">{card.name}</h4>
+                  <p className="facility-desc">{card.desc}</p>
+                </div>
               </div>
-              <div className="facility-info">
-                <h4 className="facility-name">Mesin Kapasitas Besar</h4>
-                <p className="facility-desc">
-                  Mampu memproses hingga 20kg per mesin untuk efisiensi
-                  maksimal.
-                </p>
-              </div>
-            </div>
-
-            <div className="facility-card">
-              <div className="facility-image-wrapper">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Deterjen Premium"
-                  fill
-                  sizes="33vw"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <div className="facility-info">
-                <h4 className="facility-name">Deterjen Premium</h4>
-                <p className="facility-desc">
-                  Formula khusus ramah lingkungan yang aman untuk kulit
-                  sensitif.
-                </p>
-              </div>
-            </div>
-
-            <div className="facility-card">
-              <div className="facility-image-wrapper">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Penyetrikaan Uap"
-                  fill
-                  sizes="33vw"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <div className="facility-info">
-                <h4 className="facility-name">Penyetrikaan Uap</h4>
-                <p className="facility-desc">
-                  Menghilangkan kerutan tanpa merusak serat kain halus Anda.
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -334,72 +262,23 @@ export default function TentangKamiPage() {
       <section className="team-section">
         <div className="container">
           <div className="team-header">
-            <h2 className="team-title">Tim Profesional Kami</h2>
-            <p className="team-subtitle">
-              Orang-orang di balik kesegaran pakaian Anda.
-            </p>
+            <h2 className="team-title">{team.title}</h2>
+            <p className="team-subtitle">{team.subtitle}</p>
           </div>
 
-          <div className="team-grid">
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Budi Santoso"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Budi Santoso</h4>
-              <p className="team-role">Founder & CEO</p>
-            </div>
-
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Sari Wijaya"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Sari Wijaya</h4>
-              <p className="team-role">Operations Manager</p>
-            </div>
-
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Andi Pratama"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Andi Pratama</h4>
-              <p className="team-role">Lead Technician</p>
-            </div>
-
-            <div className="team-card">
-              <div className="team-avatar">
-                <Image
-                  src="/hero_laundry.png"
-                  alt="Lina Permata"
-                  fill
-                  sizes="140px"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <h4 className="team-name">Lina Permata</h4>
-              <p className="team-role">Customer Experience</p>
+          <div className="team-single-wrapper">
+            <div className="team-photo-rect">
+              <Image
+                src={team.imageSrc}
+                alt={team.imageAlt}
+                fill
+                sizes="100vw"
+                style={{ objectFit: "cover" }}
+              />
             </div>
           </div>
         </div>
       </section>
-
 
       {/* Floating WA Button */}
       <a

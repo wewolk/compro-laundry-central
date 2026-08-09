@@ -5,20 +5,119 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 interface SidebarItem {
+  /** Website section label (matches navbar) */
   label: string;
+  /** Label shown in sidebar */
+  display: string;
+  /** SVG line icon */
+  icon: React.ReactNode;
+  /** Website page URL */
   href: string;
-  children?: { label: string; href: string }[];
+  /** Admin sub-pages to edit this section */
+  children: { label: string; href: string }[];
 }
 
 const sidebarItems: SidebarItem[] = [
-  { label: "📦 Paket", href: "/admin/paket" },
-  { label: "🧺 Kiloan", href: "/admin/kiloan" },
-  { label: "📍 Kontak & Lokasi", href: "/admin/kontak" },
-  { label: "🖼️ Galeri", href: "/admin/galeri" },
-  { label: "⚙️ Pengaturan (WA/IG)", href: "/admin/settings" },
-  { label: "🦶 Footer", href: "/admin/footer" },
   {
-    label: "📖 Panduan",
+    label: "Beranda",
+    display: "Beranda",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    ),
+    href: "/",
+    children: [
+      { label: "Hero Slider", href: "/admin" },
+      { label: "Paket Layanan", href: "/admin/paket" },
+    ],
+  },
+  {
+    label: "Layanan",
+    display: "Layanan",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+        <line x1="12" y1="22.08" x2="12" y2="12"/>
+      </svg>
+    ),
+    href: "/layanan",
+    children: [
+      { label: "Paket", href: "/admin/paket" },
+      { label: "Kiloan", href: "/admin/kiloan" },
+      { label: "Satuan Premium & Dry Clean", href: "/admin/layanan" },
+    ],
+  },
+  {
+    label: "Galeri",
+    display: "Galeri",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+    ),
+    href: "/galeri",
+    children: [
+      { label: "Foto & Video", href: "/admin/galeri" },
+    ],
+  },
+  {
+    label: "Tentang Kami",
+    display: "Tentang Kami",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
+    href: "/tentang",
+    children: [
+      { label: "Fasilitas & Tim", href: "/admin/tentang" },
+    ],
+  },
+  {
+    label: "Kontak",
+    display: "Kontak",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+    ),
+    href: "/kontak",
+    children: [
+      { label: "Alamat & Lokasi", href: "/admin/kontak" },
+      { label: "WhatsApp & Instagram", href: "/admin/settings" },
+    ],
+  },
+  {
+    label: "Pengaturan",
+    display: "Pengaturan",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    ),
+    href: "#",
+    children: [
+      { label: "Keamanan & Password", href: "/admin/settings" },
+    ],
+  },
+  {
+    label: "Panduan",
+    display: "Panduan",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+      </svg>
+    ),
     href: "/admin/panduan",
     children: [
       { label: "Memulai", href: "/admin/panduan#memulai" },
@@ -37,9 +136,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isMobile, setIsMobile] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Groups expanded in the sidebar; the active group starts open.
-  const [openGroups, setOpenGroups] = useState<string[]>(() =>
-    pathname.startsWith("/admin/panduan") ? ["/admin/panduan"] : []
-  );
+  const [openGroups, setOpenGroups] = useState<string[]>(() => {
+    for (const item of sidebarItems) {
+      if (item.children.some((c) => pathname === c.href)) return [item.label];
+    }
+    return ["Beranda"]; // Default open
+  });
 
   const toggleGroup = (href: string) =>
     setOpenGroups((current) =>
@@ -147,10 +249,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Navigation */}
         <nav style={{ flex: 1, padding: "16px 12px", display: "flex", flexDirection: "column", gap: "4px", overflowY: "auto" }}>
+          <p style={{
+            fontSize: "10px",
+            fontWeight: 700,
+            color: "rgba(255,255,255,0.35)",
+            textTransform: "uppercase",
+            letterSpacing: "1px",
+            padding: "4px 16px 8px",
+            opacity: (isMobile ? mobileMenuOpen : sidebarOpen) ? 1 : 0,
+            transition: "opacity 0.3s ease 0.1s",
+          }}>
+            Edit Bagian Website
+          </p>
           {sidebarItems.map((item, index) => {
-            const isActive = pathname === item.href;
-            const expanded = openGroups.includes(item.href);
+            const expanded = openGroups.includes(item.label);
             const revealed = isMobile ? mobileMenuOpen : sidebarOpen;
+            // Highlight group if we're on one of its child admin pages
+            const isGroupActive = item.children.some((c) => pathname === c.href);
             const itemStyle = {
               display: "flex",
               alignItems: "center",
@@ -159,91 +274,69 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               borderRadius: "10px",
               fontSize: "14px",
               fontWeight: 600,
-              color: isActive ? "white" : "rgba(255,255,255,0.7)",
-              background: isActive ? "rgba(96,165,250,0.2)" : "transparent",
+              color: isGroupActive ? "white" : "rgba(255,255,255,0.7)",
+              background: isGroupActive ? "rgba(96,165,250,0.2)" : "transparent",
               textDecoration: "none",
               transition: "all 0.2s",
               whiteSpace: "nowrap" as const,
               opacity: revealed ? 1 : 0,
               transform: revealed ? "translateX(0)" : "translateX(-20px)",
               transitionDelay: `${revealed ? 0.05 * index + 0.15 : 0}s`,
+              cursor: "pointer",
             };
 
-            if (!item.children) {
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => isMobile && setMobileMenuOpen(false)}
-                  style={itemStyle}
-                >
-                  {item.label}
-                </Link>
-              );
-            }
-
             return (
-              <div key={item.href}>
-                <div style={{ display: "flex", alignItems: "stretch", gap: "2px" }}>
-                  <Link
-                    href={item.href}
-                    onClick={() => isMobile && setMobileMenuOpen(false)}
-                    style={{ ...itemStyle, flex: 1 }}
-                  >
-                    {item.label}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => toggleGroup(item.href)}
-                    aria-expanded={expanded}
-                    aria-label={expanded ? `Tutup submenu ${item.label}` : `Buka submenu ${item.label}`}
-                    style={{
-                      width: "34px",
-                      border: "none",
-                      borderRadius: "10px",
-                      background: "transparent",
-                      color: "rgba(255,255,255,0.6)",
-                      cursor: "pointer",
-                      fontSize: "11px",
-                      opacity: revealed ? 1 : 0,
-                      transition: "opacity 0.3s ease, transform 0.2s ease",
-                      transform: expanded ? "rotate(0deg)" : "rotate(-90deg)",
-                    }}
-                  >
-                    ▼
-                  </button>
-                </div>
+              <div key={item.label}>
+                {/* Menu item: click toggles dropdown */}
+                <button
+                  type="button"
+                  onClick={() => toggleGroup(item.label)}
+                  aria-expanded={expanded}
+                  style={{
+                    ...itemStyle,
+                    width: "100%",
+                    border: "none",
+                    textAlign: "left",
+                  }}
+                >
+                  {item.icon}
+                  <span>{item.display}</span>
+                </button>
 
+                {/* Sub-menu: appears below the main menu item */}
                 {expanded && revealed && (
                   <div
                     style={{
                       display: "flex",
                       flexDirection: "column",
                       gap: "2px",
-                      marginTop: "2px",
-                      marginLeft: "18px",
-                      paddingLeft: "10px",
-                      borderLeft: "1px solid rgba(255,255,255,0.15)",
+                      paddingTop: "4px",
+                      paddingLeft: "28px",
                     }}
                   >
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={() => isMobile && setMobileMenuOpen(false)}
-                        style={{
-                          padding: "9px 12px",
-                          borderRadius: "8px",
-                          fontSize: "13px",
-                          fontWeight: 500,
-                          color: "rgba(255,255,255,0.6)",
-                          textDecoration: "none",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                    {item.children.map((child) => {
+                      const isChildActive = pathname === child.href;
+                      return (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          onClick={() => isMobile && setMobileMenuOpen(false)}
+                          style={{
+                            padding: "10px 14px",
+                            borderRadius: "8px",
+                            fontSize: "13px",
+                            fontWeight: isChildActive ? 700 : 500,
+                            color: isChildActive ? "#60a5fa" : "rgba(255,255,255,0.6)",
+                            background: isChildActive ? "rgba(96,165,250,0.15)" : "transparent",
+                            textDecoration: "none",
+                            whiteSpace: "nowrap",
+                            transition: "background 0.15s ease",
+                          }}
+                        >
+                          {child.label}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -310,9 +403,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           width: "36px",
           height: "36px",
           borderRadius: "10px",
-          background: isMobile
-            ? (mobileMenuOpen ? "#ef4444" : "#085F80")
-            : "#085F80",
+          background: "#085F80",
           color: "white",
           border: "none",
           cursor: "pointer",
@@ -321,13 +412,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           alignItems: "center",
           justifyContent: "center",
           transition: isMobile
-            ? "background 0.3s ease, transform 0.2s ease"
+            ? "opacity 0.3s ease, left 0.3s ease"
             : "left 0.3s ease",
           boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+          opacity: (isMobile && mobileMenuOpen) ? 0 : 1,
+          pointerEvents: (isMobile && mobileMenuOpen) ? "none" : "auto",
         }}
       >
         {isMobile
-          ? (mobileMenuOpen ? "✕" : "☰")
+          ? "☰"
           : (sidebarOpen ? "◀" : "▶")
         }
       </button>

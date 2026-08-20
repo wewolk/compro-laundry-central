@@ -223,7 +223,7 @@
     ]
   },
   "admin": {
-    "password": "pbkdf2$100000$+muyGyjuSzYVAklq6erhpA==$W8qpkoFekSVO/Ij/VPWTRFw6t0CVvJw+JudbVv+/JLc=",
+    "password": "pbkdf2$100000$ukQsiBzw0FiIZ+KyLR6NxA==$EPS6WNtVlTc30PulkCuBffCtheU9534p18d6K6xaZaQ=",
     "resetCode": "826540",
     "resetExpiry": 1785675707293
   },

@@ -162,8 +162,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // If on login page, don't show admin layout
-  if (pathname === "/admin/login") {
+  // If on login or forgot-password page, don't show admin layout
+  if (pathname === "/admin/login" || pathname === "/admin/forgot-password") {
     return <>{children}</>;
   }
 
